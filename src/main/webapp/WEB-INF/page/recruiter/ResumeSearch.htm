@@ -1,0 +1,869 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 高级搜索 搜索器</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)"  rel="stylesheet" type="text/css">
+<link href="${recCssPath}/select/select_com.css" rel="stylesheet" type="text/css" media="screen"  />
+<link href="${recCssPath}/recruiter/company_search_new.css" rel="stylesheet" type="text/css" media="screen"  />
+
+<script type="text/javascript" src="${recJsPath}/recruiter/index.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/path.js"></script>
+<script type="text/javascript" src="${recJsPath}/comm/jquery.js"></script> 
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/index.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_search.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/jquery.hoverDelay.js" charset="UTF-8"></script>
+
+<script language="javascript" src="${recJsPath}/type/job.js"></script>
+<script language="javascript" src="${recJsPath}/type/city.js"></script>
+<script language="javascript" src="${recJsPath}/type/industry.js"></script> 
+<script language="javascript" src="${recJsPath}/type/langSkill.js"></script>
+<script language="javascript" src="${recJsPath}/selector/selectorfunction.js"></script>
+<script language="javascript" src="${recJsPath}/selector/selector_jobs.js"></script>
+<script language="javascript" src="${recJsPath}/recruiter/options_list.js"></script>
+ 
+
+
+<script type="text/javascript">
+$(function(){
+  selects = $(".sesim");
+  initSelect();
+   //改变搜索器
+   $("#select_cddwsz li").click(function(){
+          var searchid=$(this).attr("innerval");
+       	 
+         if(searchid!=""){
+         searchResumeById(searchid);
+         }
+         
+    });
+  var initdata={
+     "expIndustryName":"${vo.expIndustryName}",//工作行业
+     "expIndustryId":"${vo.expIndustryId}",//工作行业
+     "expWorkJob":"${vo.expWorkJob}",//期望工作
+     "expWorkJobId":"${vo.expWorkJobId}",//期望工作
+     "expWorkPlaceName":"${vo.expWorkPlaceName}",//期望工作地
+     "expWorkPlaceId":"${vo.expWorkPlaceId}",//期望工作地
+     "keyWord":"${vo.keyWord}",//关键字
+     "keyType":"${vo.keyType}",//类型
+     "minEducation":"${vo.minEducation}",//学历
+     "maxEducation":"${vo.maxEducation}",//学历
+     "minExperience":"${vo.minExperience}",//工作经验
+     "maxExperience":"${vo.maxExperience}",//工作经验
+     "gender":"${vo.gender}",//性别
+     "langSkill":"${vo.langSkill}",//语言能力
+     "minAge":"${vo.minAge}",//年龄
+     "maxAge":"${vo.maxAge}",//年龄
+     "locationPlaceId":"${vo.locationPlaceId}",//居住地
+     "housePlaceId":"${vo.housePlaceId}",//籍贯
+     "workStatus":"${vo.workStatus}",//工作状态
+     "minSalary":"${vo.minSalary}",//薪资
+     "maxSalary":"${vo.maxSalary}",//薪资
+     "minHeight":"${vo.minHeight}",//升高
+     "maxHeight":"${vo.maxHeight}",//身高
+     "drvLicense":"${vo.drvLicense}",//驾照
+     "marriage":"${vo.marriage}",//婚姻状态
+     "workType":"${vo.workType}" ,//工作性质
+     "isDistrict":"${vo.isDistrict}", //绝对匹配
+     "pageNo":"${vo.pageNo}" //页数
+   };
+   
+   //回填搜索条件
+    fillbackoptions(initdata);   
+ 
+    fillback(initdata,"${contextPath}");
+
+});
+</script> 
+
+</head>
+
+<body  >
+<!-- <form> -->
+ <!-- --------------------------------顶部 start ------------------------- -------------->
+  <div id="top"> 
+   <#include "/comm/rec_top.htm">  
+  </div>
+<!-- --------------------------------顶部 end ------------------------------------------>  
+  
+    
+<div class="con" id="searckeybox">
+     <input type="hidden" id="expand1" name="expand1" value="" />
+     <input name="keyType" type="hidden" id="keyType" value="0" />
+     <input name="key" type="hidden" id="key" value="" />
+     <input type="hidden" value="1" name="page">
+     <input name="trade_id" id="trade_id" type="hidden" value="" />
+     <input name="jobs_id" id="jobs_id" type="hidden" value="" />
+     <input id="district_id" type="hidden" value="" name="district_id">
+     <input type="hidden" value="" name="sex" id="sex">
+     <input type="hidden" value="" id="educationMin" name="educationMin" />
+     <input type="hidden" value="" id="educationMax" name="educationMax" />
+     <input type="hidden" value="" id="experienceMin" name="experienceMin" />
+     <input type="hidden" value="" id="experienceMax" name="experienceMax" />
+     <input type="hidden" value="" name="minAge" >
+     <input type="hidden" value="" name="maxAge" >
+     <input type="hidden" value="" id="residence" name="residence" />
+     <input type="hidden" value="" id="household" name="household"/>
+     <input type="hidden" value="" id="workStatus" name="workStatus" />
+     <input type="hidden" value="" id="wageMin" name="wageMin" />
+     <input type="hidden" value="" id="wageMax" name="wageMax" />
+     <input type="hidden" value="" name="minHeight">
+     <input type="hidden" value="" name="maxHeight">
+     <input type="hidden" value="" id="drvLicense" name="drvLicense" />
+     <input type="hidden" value="" id="marriage" name="marriage" />
+     <input type="hidden" value="" name="nature" id="nature">
+     <input type="hidden" id="lang" name="lang" value="" />
+     
+     
+	<div class="bgColgrayQ pT_15 pB_15">
+		
+		    <div class="content">
+		
+		        <!--左边 搜索条件 S-->
+		        <div class="ResSeaL bgColgrayW">
+		        	<h2 class="jnsstjH2">简历搜索条件</h2>
+		            
+		            <!-- <div class="ssfw">
+		                <span class="verinline width_is20B">
+		                  <select name="keyType" tag="全文" class="sesim">
+		                     <option value="0">全文</option>
+							 <option value="1">简历编号</option>
+							 <option value="2">期望职位</option>
+							 <option value="3">学校</option>
+							 <option value="4">专业</option>
+							 <option value="5">最近工作职位</option>
+							 <option value="6">最近工作单位</option>
+							 <option value="7">全部工作经历</option>
+							 <option value="8">证书</option>
+		                  </select>
+		                </span>
+		                <input type="text" value="多个关键字用空格隔开" name="keyWord"
+		                  onFocus="if ($(this).val() == '多个关键字用空格隔开'){$(this).val('');}" 
+		                  autocomplete="off" onBlur="if($(this).val()=='') $(this).val('多个关键字用空格隔开');" 
+		                  class="vAlignM">
+		            </div>  --> 
+		          <div  class="ssfw" >
+		           <span class="verinline width_is20B posRel">
+                    <div id="title_keyType" class="s_list_input_bg_key">期望职位</div>
+                    <div class="menu_list_blue" id="menu_keyType" >
+                        <ul>
+                            <li lv="0" title="全文">全文</li>
+                            <li lv="1" title="简历编号">简历编号</li>
+                            <li lv="2" title="期望职位">期望职位</li>
+                            <li lv="3" title="学校">学校</li>
+                            <li lv="4" title="专业">专业</li>
+                            <li lv="5" title="最近工作职位">最近工作职位</li>
+                            <li lv="6" title="最近工作单位">最近工作单位</li>
+                            <li lv="7" title="全部工作经历">全部工作经历</li>
+                            <li lv="8" title="证书">证书</li>
+                        </ul>
+                    </div>
+                     </span>
+                     <input type="text" value="多个关键字用空格隔开" name="keyWord" id="searchkey"
+		                  onFocus="if ($(this).val() == '多个关键字用空格隔开'){$(this).val('');}" 
+		                  autocomplete="off" onBlur="if($(this).val()=='') $(this).val('多个关键字用空格隔开');" 
+		                  class="vAlignM">
+                    </div>
+		       
+		            <!--基本搜索条件 S-->
+		            <div class="sstj">
+		                <!--行业 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">意向行业：
+		                    </dt>
+		                    <dd class="fl">
+		                      <div style="margin-top:3px;">
+		                     <!--  <input type="button" value="请选择" class="btn1">  -->
+		                       <input type="button" name="industryBut" id="industryBut" value="" class="btn1" 
+		                	    onClick="expIndustrySelector.showSelector()" style="cursor:hand"  data-default="选择/修改" >
+		                      <input type="hidden" name="industryBut0" id="industryBut0" value="">
+		                      <input name="trade_id" id="trade_id" type="hidden" value="" />
+		                      </div>
+		                    </dd>
+		                </dl>
+		                <!-- 意向职位 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">意向职位：</dt>
+		                    <dd class="fl">
+		                      <div style="margin-top:3px;">
+		                    <!--   <input type="button" value="请选择" class="btn1"> -->
+		                         <input type="button" name="workJobBut" id="workJobBut" 
+		                         value="" class="btn1" 
+		                         onClick="expWorkSelector.showSelector()" 
+		                         style="cursor:hand"  data-default="选择/修改" >
+			                    <input name="jobs_id" id="jobs_id" type="hidden" value="" />
+			                    <input	name="workJobBut0" id="workJobBut0" type="hidden" value="">
+		                      
+		                      </div>
+		                    </dd>
+		                </dl>
+		                <!-- 期望工作地 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">期望工作地：</dt>
+		                    <dd class="fl posRel">
+		                      <div class="fl" style="margin-top:3px; width:50%;">
+		                       <!-- <input type="button" value="请选择" class="btn1"> -->  
+		                        <input type="button" name="workPlaceBut" 
+			                      id="workPlaceBut" value="选择地区" class="btn1" 
+			                      onClick="expWorkplaceSelector.showSelector()" style="cursor:hand"  
+			                         data-default="选择地区">
+				                  <input id="district_id" type="hidden" value="" name="district_id">
+				                  <input type="hidden" name="workPlaceBut0" id="workPlaceBut0" value="">  
+			                 
+		                      </div>
+		                      <div class="fl" style="width:49%;">&nbsp;&nbsp;
+		                      <label>
+		                      <input id="isDistrict" type="checkbox" class="vAlignM"> 绝对匹配</label>
+		                      </div>
+		                      <!--绝对匹配 弹层S-->
+		                      <div class="JDPPT" style="display:none;">
+		                      	<p class="fontSize_16 fontWeiBold">什么是绝对匹配</p>
+		                        <p>在“非绝对匹配”模式下，搜索引擎是向上兼容。</p>
+		                        <p>如：搜索“东区“，在“非绝对匹配”模式下，所有上级区域“中山市”的资料都将被搜索出来。但是在“绝对匹配”模式下，将只搜索出“东区”的数据，即完全匹配才出现在搜索结果中。</p>
+		                      </div>
+		                      <!--绝对匹配 弹层E-->
+		                    </dd>
+		                </dl>
+		                <!-- 学历 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">学历：</dt>
+		                    <dd class="fl">
+		                    
+		                       <input type="hidden" id="education_min" name="education_min" />
+                               <input type="hidden" id="education_max" name="education_max" />
+		                      <div class="mT_05">
+		                          
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                          <div id="title_education_min" class="s_list_input_bg_110" style="background:url(${recImagePath}/recruiter/up.gif) no-repeat 97% 50%;">不限</div>
+			                        <div class="menu_list" id="menu_education_min">
+			                            <ul>
+			                              <!-- <li order="0" lv="13" title="初中">初中</li>
+										  <li order="1" lv="12" title="中技">中技</li>
+			                              <li order="2" lv="11" title="中职">中职</li>
+			                              <li order="3" lv="10" title="中专">中专</li>
+			                              <li order="4" lv="9" title="职高">职高</li>
+			                              <li order="5" lv="8" title="高中">高中</li>
+			                              <li order="6" lv="7" title="高职">高职</li> -->
+			                              <li order="7" lv="6" title="大专">大专</li>
+			                              <li order="8" lv="5" title="本科">本科</li>
+			                              <li order="9" lv="4" title="硕士">硕士</li>
+			                              <li order="10" lv="3" title="MBA">MBA</li>
+			                              <li order="11" lv="2" title="EMBA">EMBA</li>
+			                              <li order="12" lv="1" title="博士">博士</li>
+			                              <li order="13" lv="0" title="其他">其他</li>
+			                              <li order="14" lv=" " title="不限">不限</li>     
+			                            </ul>
+			                        </div>
+		                        </span>
+		              
+		                        <span class="textAliCenter InlBlo vAlignB">&ndash;</span>
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                           <div id="title_education_max" class="s_list_input_bg_110">不限</div>
+			                        <div class="menu_list" id="menu_education_max">
+			                            <ul>
+			                             <!--  <li order="0" lv="13" title="初中">初中</li>
+										  <li order="1" lv="12" title="中技">中技</li>
+			                              <li order="2" lv="11" title="中职">中职</li>
+			                              <li order="3" lv="10" title="中专">中专</li>
+			                              <li order="4" lv="9" title="职高">职高</li>
+			                              <li order="5" lv="8" title="高中">高中</li>
+			                              <li order="6" lv="7" title="高职">高职</li> -->
+			                              <li order="7" lv="6" title="大专">大专</li>
+			                              <li order="8" lv="5" title="本科">本科</li>
+			                              <li order="9" lv="4" title="硕士">硕士</li>
+			                              <li order="10" lv="3" title="MBA">MBA</li>
+			                              <li order="11" lv="2" title="EMBA">EMBA</li>
+			                              <li order="12" lv="1" title="博士">博士</li>
+			                              <li order="13" lv="0" title="其他">其他</li>
+			                              <li order="14" lv=" " title="不限">不限</li>   
+			                            </ul>
+			                        </div>
+		                        </span>
+		                       </div>
+		                      
+		                      </dd>
+		                </dl>
+		                 <!-- 工作经验-->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">工作经验：</dt>
+		                    <dd class="fl">
+		                      <input type="hidden" id="experience_min" name="experience_min" />
+                              <input type="hidden" id="experience_max" name="experience_max" />
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                          <div id="title_experience_min" class="s_list_input_bg_110">不限</div>
+				             	 	<div class="menu_list" id="menu_experience_min">
+					              		<ul>
+				                              <li order="0" lv="1" title="在读生">在读生</li>
+				                              <li order="1" lv="2" title="应届毕业生">应届毕业生</li>
+				                              <li order="2" lv="3" title="1年">1年</li>
+				                              <li order="3" lv="4" title="2年">2年</li>
+				                              <li order="4" lv="5" title="3年">3年</li>
+				                              <li order="5" lv="6" title="4年">4年</li>
+				                              <li order="6" lv="7" title="5年">5年</li>
+				                              <li order="7" lv="8" title="6年">6年</li>
+				                              <li order="8" lv="9" title="7年">7年</li>
+				                              <li order="9" lv="10" title="8年">8年</li>
+				                              <li order="10" lv="11" title="9年">9年</li>
+				                              <li order="11" lv="12" title="10年及以上">10年及以上</li>
+				                              <li order="12" lv="" title="不限">不限</li>
+					              		</ul>
+					              	</div>
+		                        </span>
+		                        <span class="textAliCenter InlBlo vAlignB">&ndash;</span>
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                          <div id="title_experience_max" class="s_list_input_bg_110">不限</div>
+				             	 	<div class="menu_list" id="menu_experience_max">
+					              		<ul>
+				                              <li order="0" lv="1" title="在读生">在读生</li>
+				                              <li order="1" lv="2" title="应届毕业生">应届毕业生</li>
+				                              <li order="2" lv="3" title="1年">1年</li>
+				                              <li order="3" lv="4" title="2年">2年</li>
+				                              <li order="4" lv="5" title="3年">3年</li>
+				                              <li order="5" lv="6" title="4年">4年</li>
+				                              <li order="6" lv="7" title="5年">5年</li>
+				                              <li order="7" lv="8" title="6年">6年</li>
+				                              <li order="8" lv="9" title="7年">7年</li>
+				                              <li order="9" lv="10" title="8年">8年</li>
+				                              <li order="10" lv="11" title="9年">9年</li>
+				                              <li order="11" lv="12" title="10年及以上">10年及以上</li>
+				                              <li order="10" lv="" title="不限">不限</li>
+					              		</ul>
+					              	</div>
+		                        </span>
+		                       </div>
+		                      </dd>
+		                </dl>
+		                 <!-- 性别-->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">性别：</dt>
+		                    <dd class="fl">
+		                      <label><input name="gender" value="1" type="radio"> 男</label>&nbsp;&nbsp;
+		                      <label><input name="gender" value="2" type="radio"> 女</label>&nbsp;&nbsp;
+		                      <label><input name="gender" value="" checked type="radio"> 不限</label>
+		                    </dd>
+		                </dl>
+		                
+		            </div>
+		            <!--基本搜索条件 E-->
+		            
+		            <!--增加搜索条件 S-->
+		            <div class="sstj" id="more_search_box" style="display:none;">
+		                <!-- 语言能力 -->
+		                <dl class="ResJSYBox">
+		                	 <dt class="fl">语言能力：</dt>  
+		                	 <input type="hidden" id="lang1" name="lang1" />
+                             <input type="hidden" id="lang2" name="lang2" />
+                             <dd class="fl">
+                              <div class="mT_05">
+                                 <div class="fl verinline dateSelect mT_10 width_is43B">
+                                      <div id="title_lang" class="s_list_input_bg_110">不限</div>
+				                        <div class="menu_list" id="menu_lang">
+				                            <ul>
+				                                <li lv="1" title="外语">外语</li>
+				                                <li lv="2" title="中文">中文</li>
+				                                <li lv="" title="不限">不限</li>
+				                            </ul>
+				                        </div>
+                                 </div>
+                                 <div class="fl verinline dateSelect mT_10 width_is43B"
+                                     style="display:none" id="div_sublang1">
+                                    <div id="title_sublang1" class="s_list_input_bg_110">不限</div>
+			                        <div class="menu_list" id="menu_sublang1">
+			                            <ul>
+			                                <li lv="1" title="英语">英语</li>
+			                                <li lv="2" title="法语">法语</li>
+			                                <li lv="3" title="西班牙语">西班牙语</li>
+			                                <li lv="4" title="日语">日语</li>
+			                                <li lv="5" title="朝鲜语">朝鲜语</li>
+			                                <li lv="6" title="德语">德语</li>
+			                                <li lv="7" title="俄语">俄语</li>
+			                                <li lv="8" title="葡萄牙语">葡萄牙语</li>
+			                                <li lv="9" title="阿拉伯语">阿拉伯语</li>
+			                                <li lv="10" title="其他">其他</li>
+			                            </ul>
+			                        </div>
+                                 </div>
+                                 <div class="fl verinline dateSelect mT_10 width_is43B"
+                                       id="div_sublang2" style="display:none" >
+			                         <div id="title_sublang2" class="s_list_input_bg_110">不限</div>
+			                        <div class="menu_list" id="menu_sublang2">
+			                            <ul>
+			                                <li lv="1" title="广东话">广东话</li>
+			                                <li lv="2" title="闽南话">闽南话</li>
+			                                <li lv="3" title="上海话">上海话</li>
+			                                <li lv="4" title="潮州话">潮州话</li>
+			                                <li lv="5" title="客家话">客家话</li>
+			                                <li lv="6" title="四川话">四川话</li>
+			                                <li lv="7" title="普通话">普通话</li>
+			                                <li lv="8" title="其他">其他</li>
+			                            </ul>
+			                        </div>
+                                 </div>
+                                 
+                             </div>  
+                             </dd> 
+		                      <!-- <dd class="fl">
+		                      <div class="mT_05"  >
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                          <select name="yynn1" tag="请选择" class="sesim">
+		                            <option title="外语">外语</option>
+		                            <option title="中文">中文</option>
+		                            <option title="不限">不限</option>
+		                          </select>
+		                        </span> 
+		                        <span class="textAliCenter InlBlo vAlignB">&nbsp;</span>
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                          <select name="yynn2" tag="请选择" class="sesim" >
+		                            <option title="英语">英语</option>
+		                            <option title="法语">法语</option>
+		                            <option title="西班牙语">西班牙语</option>
+		                            <option title="日语">日语</option>
+		                            <option title="朝鲜语">朝鲜语</option>
+		                            <option title="德语">德语</option>
+		                            <option title="俄语">俄语</option>
+		                            <option title="葡萄牙语">葡萄牙语</option>
+		                            <option title="阿拉伯语">阿拉伯语</option>
+		                            <option title="其他">其他</option>
+		                          </select>
+		                        </span>
+		                       </div>
+		                    </dd>  --> 
+		                </dl> 
+		                <!-- 年龄 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">年龄：</dt>
+		                    <dd class="fl">
+		                    <input type="text" id="minAge" name="minAge"  class="width_is43B">&nbsp; &ndash; &nbsp;
+		                    <input type="text" id="maxAge" name="maxAge"  class="width_is43B">
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">现居住地：</dt>
+		                    <dd class="fl">
+		                      <div style="margin-top:3px;">
+		                      <!--  <input type="button" value="请选择" class="btn1">  --> 
+		                        <input type="button" name="residenceBut" id="residenceBut" 
+		                        value="选择地区" class="btn1" onClick="expResidenceSelector.showSelector()" 
+		                        style="cursor:hand"  data-default="选择地区">
+                  			    <input type="hidden" name="residenceBut0" id="residenceBut0" value="">
+		                        <input type="hidden" value="" id="residence" name="residence" />   
+		                      </div>
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">籍贯：</dt>
+		                    <dd class="fl">
+		                      <div style="margin-top:3px;">
+		                    <!--  <input type="button" value="请选择" class="btn1">   -->
+		                      <input type="button" name="householdBut" id="householdBut" 
+		                      value="选择地区" class="btn1" onClick="expHouseholdSelector.showSelector()" 
+		                      style="cursor:hand"  data-default="选择地区">
+                              <input type="hidden" name="householdBut0" id="householdBut0" value="">
+		                        <input type="hidden" value="" id="household" name="household"/> 
+		                      </div>
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">工作状态：</dt>
+		                    <dd class="fl">
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is98B">
+		                           <div id="title_workStatus" class="s_list_input_bg_220">不限</div>
+				                    <div class="menu_list" id="menu_workStatus">
+				                        <ul>
+				                            <li lv="1" title="离职">离职</li>
+				                            <li lv="2" title="在职">在职</li>
+				                            <li lv="0" title="不限">不限</li>
+				                        </ul>
+				                    </div>
+		                        </span>
+		                      </div>
+		                    </dd>
+		                </dl>
+		                <!-- 期望薪资 -->
+		                <dl class="ResJSYBox">
+		                    <dt class="fl">期望薪资：</dt>
+		                    <dd class="fl">
+		                    <input id="wage_min" name="wage_min" type="text" class="width_is43B">&nbsp; &ndash; &nbsp;
+		                    <input id="wage_max" name="wage_max" type="text" class="width_is43B">
+		                    </dd>
+	<!-- 	                	<dt class="fl">期望薪资：</dt>
+		                    <dd class="fl">
+		                     <input name="wage_min" type="hidden" id="wage_min" value="" />
+                             <input name="wage_max" type="hidden" id="wage_max" value="" />
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                         <div id="title_wage_min" class="s_list_input_bg_110">不限</div>
+			                        <div class="menu_list" id="menu_wage_min">
+			                            <ul>
+			                          <li order="0" lv="1" title="2000以下">2000以下</li>
+			                         <li order="1" lv="2" title="2000">2000</li>
+			                         <li order="2" lv="3" title="3000">3000</li>
+			                         <li order="3" lv="4" title="4000">4000</li>
+			                         <li order="4" lv="5" title="6000">6000</li>
+			                         <li order="5" lv="6" title="8000">8000</li>
+			                         <li order="6" lv="7" title="10000">10000</li>
+			                         <li order="7" lv="8" title="15000">15000</li>
+			                         <li order="8" lv="9" title="20000">20000</li>
+			                         <li order="9" lv="10" title="30000">30000</li>
+			                         <li order="10" lv="11" title="40000">40000</li>
+			                         <li order="11" lv="12" title="50000以上">50000以上</li>
+			                         <li order="12" lv="13" title="面议">面议</li>
+			                         <li order="13" lv="" title="不限">不限</li>
+			                            </ul>
+			
+			                        </div>
+		                        </span>
+		                        <span class="textAliCenter InlBlo vAlignB">到</span>
+		                        <span class="verinline dateSelect mT_10 width_is43B">
+		                         <div id="title_wage_max" class="s_list_input_bg_110">不限</div>
+			                        <div class="menu_list" id="menu_wage_max">
+			                            <ul>
+			                            <li order="0" lv="1" title="2000以下">2000以下</li>
+			                         <li order="1" lv="2" title="2000">2000</li>
+			                         <li order="2" lv="3" title="3000">3000</li>
+			                         <li order="3" lv="4" title="4000">4000</li>
+			                         <li order="4" lv="5" title="6000">6000</li>
+			                         <li order="5" lv="6" title="8000">8000</li>
+			                         <li order="6" lv="7" title="10000">10000</li>
+			                         <li order="7" lv="8" title="15000">15000</li>
+			                         <li order="8" lv="9" title="20000">20000</li>
+			                         <li order="9" lv="10" title="30000">30000</li>
+			                         <li order="10" lv="11" title="40000">40000</li>
+			                         <li order="11" lv="12" title="50000以上">50000以上</li>
+			                         <li order="12" lv="13" title="面议">面议</li>
+			                         <li order="13" lv="" title="不限">不限</li>
+			                            </ul>
+			                        </div>
+		                        </span>
+		                       </div>
+		                    </dd> -->
+		                </dl>
+		                <!-- 身高 -->
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">身高：</dt>
+		                    <dd class="fl">
+		                    <input id="minHeight" name="minHeight" type="text" class="width_is43B">&nbsp; &ndash; &nbsp;
+		                    <input id="maxHeight" name="maxHeight" type="text" class="width_is43B">
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">驾照：</dt>
+		                    <dd class="fl">
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is98B">
+		                            <div id="title_drvLicense" class="s_list_input_bg_220">不限</div>
+				                    <div class="menu_list" id="menu_drvLicense">
+				                        <ul>
+				                            <li lv="1" title="A1">A1</li>
+				                            <li lv="2" title="A2">A2</li>
+				                            <li lv="3" title="A3">A3</li>
+				                            <li lv="4" title="B1">B1</li>
+				                            <li lv="5" title="B2">B2</li>
+				                            <li lv="6" title="C1">C1</li>
+				                            <li lv="7" title="C2">C2</li>
+				                            <li lv="8" title="其他">其他</li>
+				                            <li lv="" title="不限">不限</li>
+				                        </ul>
+				                    </div>
+		                        </span>
+		                      </div>
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">婚姻状态：</dt>
+		                    <dd class="fl">
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is98B">
+		                           <div id="title_marriage" class="s_list_input_bg_220">不限</div>
+			                        <div class="menu_list" id="menu_marriage">
+			                            <ul>
+			                                <li order="0" lv=""  title="不限">不限</li>
+			                                <li order="1" lv="1"  title="未婚">未婚</li>
+			                                <li order="2" lv="2"  title="已婚">已婚</li>
+			                            </ul>
+			                        </div>
+		                        </span>
+		                      </div>
+		                    </dd>
+		                </dl>
+		                
+		                <dl class="ResJSYBox">
+		                	<dt class="fl">工作性质：</dt>
+		                    <dd class="fl">
+		                      <div class="mT_05">
+		                        <span class="verinline dateSelect mT_10 width_is98B">
+		                          <div id="title_jobs_nature" class="s_list_input_bg_220">不限</div>
+			                        <div class="menu_list" id="menu_jobs_nature">
+			                            <ul>
+			                                <li lv="1" title="全职">全职</li>
+				              		        <li lv="2" title="兼职">兼职</li>
+				              		        <li lv="3" title="实习">实习</li>
+			                                <li order="" lv=""  title="不限">不限</li>
+			                            </ul>
+			                        </div>
+		                        </span>
+		                      </div>
+		                    </dd>
+		                </dl>
+		                
+		                
+		                
+		                
+		            </div>
+		            <!--增加搜索条件 E-->
+		            <div class="clear"></div>
+		            <p class="textAliCenter mT_20 sggd">
+		            <a href="#" class="a1_green" id="a_more_search">设置更多搜索条件</a></p>
+		            
+		            <span class="btn_search mAuto mT_10">
+		            <a href="javascript:;" id="searchReusme" cp="${base.contextPath}">开始搜索</a><i></i>
+		            </span>
+		            
+		        
+		            <div class="textAliCenter mT_144 bqssq">
+		            <!--全部搜索条件展开时 mT_144换成mT_25-->保存以上条件为搜索器：
+		            <input type="text" style="width:50%;" class="inp1" id="searchname">
+		            <input type="button" id="saveSearch" value="保存" class="btn_save1 bgColgrayG fontCol_white">
+		            </div>
+		        </div>
+		        <!--左边 搜索条件 E-->
+		        
+		        <!-- 右边 搜索器 S-->
+		        <div class="ResSeaR fr bgColgrayW pT_15">
+		        	<div class="ResSeaRTitle"><span class="fl fontSize_14">搜索器</span>
+		        	<a href="javascript:void(0);" id="delSearch" title="删除当前选中搜索器" class="fr DelIcon"></a></div>
+		              <span class="verinline width_is98B mT_10">
+		                  <select name="cddwsz" tag="请选择搜索器"  id="changeword" class="sesim">
+		                    <option value="" title="全部">请选择搜索器</option>
+		                  <#list search as item>
+		                    <option value="${item.id}">${item.serchName}</option>
+		                  </#list> 
+		                  </select>
+		                </span>
+		            
+		           <!--  <div class="ResSeaRTitle mT_25"><span class="fl fontSize_14">简历ID搜索</span></div>
+		            <div class="jnIDSearch mT_10"><input type="text"><input type="button" value="搜索"></div> -->
+		            
+		            <div class="ResSeaRTitle mT_25"><span class="fl fontSize_14">最近搜索条件</span>
+		           <!--  <a href="#" title="删除当前选中搜索条件" class="fr DelIcon"></a> -->
+		            </div>
+		            <ul class="zjSearchTj">
+		             <#list searchlog as item>
+		            	<li class="fl">
+		            	<a href="${base.contextPath}/recruiter/change_serch_word?id=${item.id}" class="fl search" >
+		            	<#if item.showWord?exists>
+		            	   ${item.showWord}
+		                </#if>           
+		            	 </a>
+		            	 <a href="javascript:void(0);"  logid="${item.id}" title="删除当前搜索条件" 
+		            	     cp="${base.contextPath}"  id="delSearchLog"  
+		            	     class="fr DelIcon">&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		                </li>
+		            
+		              </#list> 
+		            </ul>
+		        </div>
+		        <!-- 右边 搜索器 E-->
+		        
+		        <div class="clear"></div>
+		                    
+		    </div>
+		    
+		</div>
+ 
+ </div>   
+<!-- -----底部 start------ -->
+ <div id="bottom">
+  <#include "/comm/rec_footer.htm">
+ </div>
+<!-- -----底部 end----- -->
+ 
+<!-- </form> -->
+</body>
+</html>
+<script type="text/javascript">
+ 
+    //行业
+    var expIndustrySelector = new Selector("expIndustrySelector", 2, 1, 3);
+    expIndustrySelector.Init("trade_id", "industryBut", "right",50);
+    expIndustrySelector.initResult();
+    
+    //意向职位
+    var expWorkSelector = new Selector("expWorkSelector", 1, 3, 3);
+    expWorkSelector.Init("jobs_id", "workJobBut", "right");
+    expWorkSelector.initResult();
+    
+    //选择 工作地点
+    var expWorkplaceSelector = new Selector("expWorkplaceSelector", 0, 5, 3);
+    expWorkplaceSelector.Init("district_id", "workPlaceBut", "left","-500");
+    expWorkplaceSelector.initResult();
+    
+    //选择 现居住地
+    var expResidenceSelector = new Selector("expResidenceSelector", 0, 1, 3);
+    expResidenceSelector.Init("residence", "residenceBut", "right");
+    expResidenceSelector.initResult();
+    //选择 户籍
+    var expHouseholdSelector = new Selector("expHouseholdSelector", 0, 1, 3);
+    expHouseholdSelector.Init("household", "householdBut", "left","90");
+    expHouseholdSelector.initResult();
+
+</script>
+<script type="text/javascript">
+$(function(){
+    //set dropdown menu
+    menuDown('#title_keyType','#keyType','','#menu_keyType','100%');
+	menuDown("#title_experience_min","#experienceMin","","#menu_experience_min","98px");
+	menuDown("#title_experience_max","#experienceMax","","#menu_experience_max","98px");
+    menuLink('#menu_experience_min','#menu_experience_max','#experienceMin','#title_experience_min','#experienceMax','#title_experience_max');
+    menuDown("#title_education_min","#educationMin","","#menu_education_min","98px");
+    menuDown("#title_education_max","#educationMax","","#menu_education_max","98px");
+    menuLink('#menu_education_min','#menu_education_max','#educationMin','#title_education_min','#educationMax','#title_education_max');
+    menuDown('#title_lang','#lang1','#lang_cn','#menu_lang','98px');
+    menuDown('#title_sublang1','#lang2','#lang_cn','#menu_sublang1','98px');
+    menuDown('#title_sublang2','#lang2','#lang_cn','#menu_sublang2','98px');
+    menuDown('#title_workStatus','#workStatus','','#menu_workStatus','214px');
+    menuDown("#title_wage_min","#wageMin","","#menu_wage_min","98px");
+    menuDown("#title_wage_max","#wageMax","","#menu_wage_max","98px");
+    menuLink('#menu_wage_min','#menu_wage_max','#wageMin','#title_wage_min','#wageMax','#title_wage_max');
+    menuDown("#title_marriage","#marriage","","#menu_marriage","214px");
+    menuDown("#title_jobs_nature","#nature","","#menu_jobs_nature","214px");
+    menuDown("#title_drvLicense","#drvLicense","","#menu_drvLicense","214px");
+    menuDown("#title_sortField","#sortField","","#menu_sortField","98px");
+    menuDown("#title_ssq","#id","","#menu_ssq","168px");
+
+    //语言选择
+    $('#menu_lang li').click(function(){
+        $('#lang2').val('');
+        setLang();
+    });
+    $('#menu_sublang1 li').click(function(){
+        setLang();
+    })
+    $('#menu_sublang2 li').click(function(){
+        setLang();
+    })
+});
+function setLang() {
+    var lang1 = $('#lang1').val();
+    var lang2 = $('#lang2').val();
+    $('#div_sublang1').hide();
+    $('#div_sublang2').hide();
+    if (lang1 == 1) {
+        $('#div_sublang1').show();
+    } else if (lang1 == 2) {
+        $('#div_sublang2').show();
+    } else {
+
+    }
+    if (lang1 != '') {
+        $('#searckeybox input[name=lang]').val(lang1 + '.' + lang2);
+    }else{
+        $('#searckeybox input[name=lang]').val('');
+    }
+}
+function menuDown(menuId,input,input_cn,menuList,width){
+	$(menuId).click(function(){
+		$(menuList).css("width",width);
+		$(menuList).slideDown('fast');
+		//生成背景
+		$(menuId).parent().parent("div").before("<div class=\"menu_bg_layer\"></div>");
+		$(".menu_bg_layer").height($(document).height());
+		$(".menu_bg_layer").css({ width: $(document).width(), position: "absolute", left: "0", top: "0" , "z-index": "0", "background-color": "#ffffff"});
+		$(".menu_bg_layer").css("opacity","0");
+		$(".menu_bg_layer").click(function(){
+			$(".menu_bg_layer").remove();
+			$(menuList).slideUp("fast");
+			$(menuId).parent("div").css("position","");
+		});
+	});
+
+	$(menuList+" li").click(function(){
+		var id = $(this).attr("lv");
+		var title = $(this).attr("title");
+		$(input).val(id);
+		$(input_cn).val(title);
+		$(menuId).html(title);
+		$(menuList).slideUp('fast');
+		$(".menu_bg_layer").remove();
+	});
+}
+function menuLink(left_id,right_id,left_value,left_cn,right_value,right_cn){
+    $(left_id+' li').click(function(){
+        var minId=parseInt($(this).attr("order"));
+        $(right_id+' li').each(function(){
+            if(parseInt($(this).attr('order'))>=minId){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+        var rightmax=$(right_id+' li:last');
+        $(right_value).val(rightmax.attr('id'));
+        $(right_cn).html(rightmax.html());
+        //_buildArgsFromMenuLink(left_id,right_id,left_value,right_value,value);
+    });
+    /*
+    $(right_id+' li').click(function(){
+        _buildArgsFromMenuLink(left_id,right_id,left_value,right_value,value);
+    });
+    */
+}
+function _buildArgsFromMenuLink(left_id,right_id,left_value,right_value,value){
+    var left_order=0;
+    var right_order=0;
+    $(left_id+' li').each(function(){
+        if($(this).attr('lv')==$(left_value).val()){
+            left_order=parseInt($(this).attr("order"));
+            return false;
+        }
+    })
+    $(right_id+' li').each(function(){
+        if($(this).attr('lv')==$(right_value).val()){
+            right_order=parseInt($(this).attr("order"));
+            return false;
+        }
+    })
+
+    var res='';
+    if(left_order<=right_order){
+        var commas='';
+        for(var i=left_order;i<=right_order;i++){
+            res+=commas+$(left_id+' li[order='+i+']').attr('lv');
+            commas=',';
+        }
+    }
+    $(value).val(res);
+}
+function recoverMenu(menu_id,menu_value,menu_cn,value,_order){
+    var order=0;
+    $(menu_id+' li').each(function(){
+        var lv = parseInt($(this).attr('lv'));
+        if(lv==parseInt(value)){
+            order=$(this).attr('order');
+            $(menu_value).val(value);
+            $(menu_cn).html($(this).html());
+        }
+        if(_order!=undefined){
+            var o=parseInt($(this).attr('order'));
+            if(o>=_order){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        }
+    });
+    return order;
+}
+	
+</script>

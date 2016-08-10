@@ -1,0 +1,80 @@
+
+<#list page.result as item>
+<!--内容块 S-->
+<#if item_index==0>
+	<div class="mesBox0 mT_20">
+<#else>
+	<div class="mesBox0">
+</#if>
+<!-- <div class="mesBox0 mT_20"> -->
+<!--左边时间轴 S-->
+<#if item.jsView==0><!-- 未读 -->
+<div class="fl mesTime fontSize_16 fontWeiBold fontCol_green textAliRight">
+<#else>
+<div class="fl mesTime fontSize_16 fontWeiBold fontCol_grayQ textAliRight">
+</#if>
+
+${item.receiveTime}
+</div>
+   <!--左边时间轴 E-->
+   
+   <!--右边内容 S-->
+<div class="fl mesBox1 posRel">
+   	<div class="mesBoxPoint"></div>
+       
+   	<div class="posRel mT_10 mL_15">
+           <div class="mesBoxArrow"></div>
+           <div class="mesBox2 bgColgrayW mL_15 msgBox">
+               <div>
+               	<#if item.jsView==0><!-- 未读 -->
+                 	<h3>
+	<a href="javascript:void(0);" class="fontSize_16 a1_green expand" mid="${item.infoid}" actionUrl="${contextPath}/recruiter/resume/msgReaded" title="展开消息内容">系统提示公告<i class="icon_arrowMes hand">&nbsp;</i></a>
+	
+</h3>
+                	<#else>
+                		<h3>
+	<a href="javascript:void(0);" class="fontSize_16 a3_grayQb" mid="${item.infoid}"  title="展开消息内容">系统提示公告</a>
+</h3>
+    	</#if>
+                    <div class="Gs">
+                    <a href="javascript:void(0);" id="checkRs" msgid="${item.id}" flag="0"></a>
+                    </div>
+                </div>
+                <#if item.jsView==0><!-- 未读 -->
+               	<div class="pT_8 textYC msgContent" style="display: none">${item.comtent}</br>
+               	    <#if item.backMemo??&&item.backMemo!=''>
+                 	      求职者反馈：${item.backMemo}
+               	    </#if>
+               	</div>
+               <#else>
+               	<div class="pT_8 textYC msgContent">${item.comtent}</br>
+               	  <#if item.backMemo??&&item.backMemo!=''>
+                 	      求职者反馈：${item.backMemo}
+               	    </#if>
+               	</div>
+               </#if>
+               <!-- <p class="fr">
+                <a href="#" class="zk">展开</a>
+               </p> -->
+           </div>
+           <#if item.jsView==0><!-- 未读 -->
+              	<div class="pT_8 pB_8 pR_8 mL_15 bgColgrayG textAliRight delBg">
+             	<#else>
+             	<div class="pT_8 pB_8 pR_8 mL_15 bgColgrayS textAliRight delBg">
+ 			</#if>
+           <a id="delMsg"  msgid="${item.id}" href="javascript:void(0);" cp="${base.contextPath}" 
+             class="qsA mR_12 fontSize_12" >删除</a>
+           </div>
+       </div>
+                  	
+   </div>
+   <!--右边内容 E-->
+    
+    <div class="clear"></div>
+</div>
+<!--内容块 E-->
+</#list>
+ <!--翻页 S-->
+<div class="movePage">${page.roll}
+     <div class="clear"></div>
+</div>

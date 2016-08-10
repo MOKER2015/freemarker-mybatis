@@ -1,0 +1,24 @@
+      <!--待下载成功-->
+      <div>
+          <p class="pT_40 textAliCenter">
+            <img src="${recImagePath}/recruiter/icon_g.png" alt=""/>&nbsp;&nbsp;
+                                     该简历您 已经购买，无需再次下载，请在已下载简历查看
+          </p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="查看" onclick="doviewhasBuy()">
+          </div>
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+      
+ <script type="text/javascript">
+ 
+ //查看已经下载
+ function doviewhasBuy(){
+   window.location.href="${base.contextPath}/recruiter/hasDownLoad";
+  }
+  
+
+</script>  

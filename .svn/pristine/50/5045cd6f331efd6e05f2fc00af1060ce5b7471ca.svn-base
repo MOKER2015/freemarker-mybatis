@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 系统消息</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1920.css" media="(min-width:1680.1px) and (max-width:1920px)" rel="stylesheet" type="text/css">
+
+
+<!--[if lt IE 9]>
+  <script src="recjs/recruiter/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="${recJsPath}/recruiter/index.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/index.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery.dialog.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_list.js"></script>
+
+</head>
+<script type="text/javascript">
+function query(newpage){
+	var viewtype=$("#select_info_jsView").attr("innerval");
+	if(!viewtype){
+		var url="${base.contextPath}/recruiter/messageList?pageNo="+newpage
+	}else{
+		var url="${base.contextPath}/recruiter/messageList?pageNo="+newpage+"&jsview="+viewtype;
+	}
+// 	window.location.href=url;
+	$("#messagelist").load(url);
+}
+$(function(){
+	selects = $(".sesim");
+	initSelect();
+
+	$('.link_more_s').click(function () {
+		$(this).toggleClass('linkZDHover');
+		$('.arrange_box_top').toggle();
+	})
+	//改变搜索器
+/* 	$("#changeRead").change(function(){
+		var viewtype=$(this).val();
+		alert(viewtype);
+	}); */
+	 $("#select_jsView li").click(function(){
+		var viewtype=$(this).attr("innerval");
+		var params = {jsview:viewtype};
+		$("#messagelist").load("${base.contextPath}/recruiter/messageList",params);
+	}); 
+})
+</script>
+<body >
+  <div id="top">  
+   <#include "/comm/rec_top.htm">   
+  </div>
+
+<div class="bgColgrayQ pB_15">
+
+    <div class="ConImfBox">
+    	<h3 class="cwszrrc fontSize_16 fontWeiBold">消息通知</h3>
+    
+		<!--操作栏 S-->
+        <div class="bgColgrayW cjn">
+             <div class="mesSSDW"><!-- 20160121 -->
+              <span class="verinline dateSelect width_is80">
+                    <select name="jsView" tag="全部" class="sesim" id="changeRead">
+                      <option value="" title="全部">全部</option>
+                      <option value="0"  title="未读">未读</option>
+                      <option value="1"  title="已读">已读</option>
+                    </select>
+              </span>&nbsp;&nbsp;
+            <!--  <a href="javascript:;" id="checkall"   flag="0">全选</a> -->
+                <input type="checkbox" class="vAlignM qsC" id="checkall"> 全选</label>&nbsp;&nbsp;&nbsp;&nbsp;
+             <a href="javascript:;" class="Aqs" id="delMsgAll" cp="${base.contextPath}">删除</a>
+ 
+            </div>
+        </div>
+        <div id="messagelist">
+        	<#list page.result as item>
+				<!--内容块 S-->
+				<#if item_index==0>
+					<div class="mesBox0 mT_20">
+				<#else>
+					<div class="mesBox0">
+				</#if>
+				<!-- <div class="mesBox0 mT_20"> -->
+				<!--左边时间轴 S-->
+				<#if item.jsView==0><!-- 未读 -->
+				<div class="fl mesTime fontSize_16 fontWeiBold fontCol_green textAliRight">
+				<#else>
+				<div class="fl mesTime fontSize_16 fontWeiBold fontCol_grayQ textAliRight">
+				</#if>
+				
+				${item.receiveTime}
+				</div>
+				   <!--左边时间轴 E-->
+				   
+				   <!--右边内容 S-->
+				<div class="fl mesBox1 posRel">
+				   	<div class="mesBoxPoint"></div>
+				       
+				   	<div class="posRel mT_10 mL_15">
+				           <div class="mesBoxArrow"></div>
+				           <div class="mesBox2 bgColgrayW mL_15 msgBox">
+				               <div>
+				               	<#if item.jsView==0><!-- 未读 -->
+				                 	<h3>
+					<a href="javascript:void(0);" class="fontSize_16 a1_green expand" mid="${item.infoid}" actionUrl="${contextPath}/recruiter/resume/msgReaded" title="展开消息内容">系统提示公告<i class="icon_arrowMes hand">&nbsp;</i></a>
+					
+				</h3>
+				                	<#else>
+				                		<h3>
+					<a href="javascript:void(0);" class="fontSize_16 a3_grayQb" mid="${item.infoid}"  title="展开消息内容">系统提示公告</a>
+				</h3>
+				    	</#if>
+				                    <div class="Gs">
+				                    <a href="javascript:void(0);" id="checkRs" msgid="${item.id}" flag="0"></a>
+				                    </div>
+				                </div>
+				                <#if item.jsView==0><!-- 未读 -->
+				               	<div class="pT_8 textYC msgContent" style="display: none">${item.comtent}</br>
+				               	<#if item.backMemo??&&item.backMemo!=''>
+			                 	      求职者反馈：${item.backMemo}
+			               	    </#if>
+				               	</div>
+				               <#else>
+				               	<div class="pT_8 textYC msgContent">${item.comtent}</br>
+				               	<#if item.backMemo??&&item.backMemo!=''>
+			                 	      求职者反馈：${item.backMemo}
+			               	    </#if>
+				               	
+				               	</div>
+				               </#if>
+				               <!-- <p class="fr">
+				                <a href="#" class="zk">展开</a>
+				               </p> -->
+				           </div>
+				           <#if item.jsView==0><!-- 未读 -->
+				              	<div class="pT_8 pB_8 pR_8 mL_15 bgColgrayG textAliRight delBg">
+				             	<#else>
+				             	<div class="pT_8 pB_8 pR_8 mL_15 bgColgrayS textAliRight delBg">
+				 			</#if>
+				           <a id="delMsg"  msgid="${item.id}" href="javascript:void(0);" cp="${base.contextPath}" 
+				             class="qsA mR_12 fontSize_12" >删除</a>
+				           </div>
+				       </div>
+				                  	
+				   </div>
+				   <!--右边内容 E-->
+				    
+				    <div class="clear"></div>
+				</div>
+				<!--内容块 E-->
+				</#list>
+				 <!--翻页 S-->
+				<div class="movePage">${page.roll}
+				     <div class="clear"></div>
+				</div>
+        </div>
+    </div>
+
+        
+    </div>
+
+ <div id="bottom">
+ <#include "/comm/rec_footer.htm">
+ </div>
+ <script type="text/javascript">
+ 	//覆盖footer.htm的goResumeView方法
+	if(typeof goResumeView == 'function'){
+		goResumeView =  function (param){
+			 window.open("${contextPath}/resumemgr/resumeView?rid="+param.rid,"_blank");
+		 }
+	}
+ 	$(function(){
+ 		$(".expand").die().live("click",function(){
+ 			var that = $(this);
+ 			var mid = that.attr("mid");
+ 			var url = that.attr("actionUrl");
+ 			$.post(url,{mids:mid},function(data){
+ 				var res = $.parseJSON(data);
+ 				if(res.result==1){
+ 					var msgBox = that.closest(".msgBox");
+ 		 			msgBox.find(".msgContent").slideDown();
+ 		 			msgBox.next().removeClass("bgColgrayG").addClass("bgColgrayS");
+ 		 			that.closest(".mesBox0").find(".mesTime").removeClass("fontCol_green").addClass("fontCol_grayQ");
+ 		 			that.removeClass("expand fontCol_green").addClass("a3_grayQb");
+ 		 			that.find("i").remove();
+ 				}
+ 			});
+ 		});
+ 	});
+ 	
+ </script>
+</body>
+</html>

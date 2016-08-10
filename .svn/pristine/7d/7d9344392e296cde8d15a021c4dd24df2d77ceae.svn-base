@@ -1,0 +1,3 @@
+#页面地址配置
+web.view.prefix=/WEB-INF/page
+web.view.suffix=.htm

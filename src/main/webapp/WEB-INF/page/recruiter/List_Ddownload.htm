@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 意向邀请</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1920.css" media="(min-width:1680.1px) and (max-width:1920px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/common.css" rel="stylesheet" type="text/css" />   
+
+<!--[if lt IE 9]>
+  <script src="recjs/recruiter/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="${recJsPath}/recruiter/index.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery.dialog.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/index.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_list.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_view.js"></script>
+
+
+</head>
+<script type="text/javascript">
+  function query(newpage){
+    window.location.href="${base.contextPath}/recruiter/intentionResume?pageNo="+newpage;
+  }
+  var contextPath = "${contextPath}";
+
+</script>
+
+<body  >
+<!-- <form> -->
+ <!-- --------------------------------顶部 start ------------------------- -------------->
+  <div id="top"> 
+   <#include "/comm/rec_top.htm">  
+  </div>
+<!-- --------------------------------顶部 end ------------------------------------------>  
+
+<div class="bgColgrayQ pB_15">
+
+    <div class="ConImfBox">
+    	
+    
+		<!--操作栏 S-->
+        <div class="bgColgrayW cjn">
+        <h3 class="cwszrrc fontSize_16 fontWeiBold fl"><i class="icon_dxxjn"></i>意向邀请</h3>
+            <div class="fr">
+            <!--  <a href="javascript:;" id="checkall" class="Aqsh"  flag="0">全选</a> -->
+             <input type="checkbox" class="vAlignM qsC" id="checkall"> 全选</label>&nbsp;&nbsp;&nbsp;&nbsp;
+             <a href="javascript:;" class="Asq" id="addfavall" cp="${base.contextPath}">收藏</a>
+             <a href="javascript:;" class="Aqs" id="delAllApp" cp="${base.contextPath}"
+              callurl="/recruiter/intentionResume">删除</a>
+            </div>
+        </div>
+        <!--操作栏 S-->
+        
+        <ul class="MaCenterUl">
+        <#list page.result as item>
+        	<li class="fl bgColgrayW mT_10">
+              <div class="pL_15 pR_15 pT_15 pB_15 posRel">
+                  <div class="pT_8">
+                    <div class="fl posRel Tx">
+                     <a href="${base.contextPath}/resumemgr/resumeView?rid=${item.rid}" target="_blank"
+                         rid="${item.rid}" onclick="return beforeView($(this));">
+                        <#if item.userinfo.gender==1>
+							<img src="${recResumeImg}${item.userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/>
+						<#else>
+							<img src="${recResumeImg}${item.userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_female.gif'"/>
+						</#if>
+                     <i class="zj_userTx zj_userTx01"></i>
+                    </a>
+                    </div>
+                    <div class="fl w_82B">
+                    <p class="lineHei_170 fontSize_14 fontCol_green YCText">
+                        <#if item.userinfo.linkType==0>
+                    	  考虑中
+                    	<#elseif item.userinfo.linkType==1> 
+                                                                         邀请成功
+                       <#elseif item.userinfo.linkType==2>
+                                                                        不接受邀请
+                       <#elseif item.userinfo.linkType==3>
+                                                                        不接受邀请
+                       </#if> 
+                     </p>
+                      <p class="lineHei_170 fontCol_grayQ">
+                          <#if item.userinfo.gender==1> 男
+                          	<#elseif item.userinfo.gender==2> 女
+                           </#if> |
+                           ${item.birthday}岁 |
+                           ${item.degreeName} |
+                           ${item.workExpName} |
+                           <#if item.intension.workingStatus==1>离职
+                           <#elseif item.intension.workingStatus==2>在职
+                           </#if>
+                       </p>
+                     
+                    </div>
+                    
+                    <!-- <p class="fl lineHei_170 fontSize_14">
+                    <span class="fontCol_orange">
+                    	<#if item.userinfo.linkType==0>
+                    	  考虑中
+                    	<#elseif item.userinfo.linkType==1> 
+                                                                         邀请成功
+                       <#elseif item.userinfo.linkType==2>
+                                                                        不接受邀请
+                       </#if> 
+                    </span><br />
+                      <span class="fontSize_14 fontCol_grayQ">
+                           <#if item.userinfo.gender==1> 男
+                          	<#elseif item.userinfo.gender==2> 女
+                           </#if> |
+                           ${item.birthday}岁 |
+                           ${item.degreeName} |
+                           ${item.workExpName} |
+                           <#if item.intension.workingStatus==1>离职
+                           <#elseif item.intension.workingStatus==2>在职
+                           </#if>
+                    </span>
+                   </p> -->
+                    <div class="clear"></div>
+                  </div>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expWork}">
+                                                         意向职位：${item.intension.expWork}</p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expIndustry}">
+                                                          意向行业：${item.intension.expIndustry}</p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expWorkplace}">
+                                                        期望工作地：${item.intension.expWorkplace}</p>
+                  <p class="lineHei_200 fontSize_14 YCText fontCol_grayQ" title="">
+                                                              邀请时间：${item.addTime}</p>
+                  <div class="Gs">
+                  <a href="#" id="checkRs" appid="${item.appId}" rid="${item.rid}" flag="0"></a>
+                  </div>
+              </div>
+              	<#if item.userinfo.linkType==0>
+                     <p class="pT_8 pB_8 pR_8 bgColgrayG textAliRight">
+                     <!--  <span style="float: left;">邀请时间：${item.addTime}</span>  -->
+                       <#if item.isFav==3>
+                        <a href="#" class="scAY mR_12 fontSize_12" id="docancel" 
+                         cp="${base.contextPath}" rid="${item.rid}">已收藏</a>
+                      <#else>
+		              <a href="javascript:;" class="scA mR_12 fontSize_12" id="addfav" 
+		                cp="${base.contextPath}" rid="${item.rid}">收藏</a>
+		             </#if>
+		              <a href="javascript:void(0);" rid ="${item.rid}" appid="${item.appId}" 
+		                   cp="${base.contextPath}"   class="qsA mR_12 fontSize_12" 
+		                   id="delApp" callurl="/recruiter/intentionResume">删除</a>
+		             </p>
+                <#elseif item.userinfo.linkType==1> 
+                   <p class="pT_8 pB_8 pR_8 bgColgrayO textAliRight">
+                  <!--   <span style="float: left;">邀请时间：${item.addTime}</span> 
+                     -->
+                     <#if item.userinfo.mobile!="">
+		             <a href="javascript:;" class="downloadA mR_12 fontSize_12" id="download" downtype="1"
+		              cp="${base.contextPath}" rid="${item.rid}">下载</a> 
+		              </#if>
+		             <#if item.isFav==3>
+                        <a href="#" class="scAY mR_12 fontSize_12" id="docancel" 
+                         cp="${base.contextPath}" rid="${item.rid}">已收藏</a>
+                      <#else>
+		             <a href="javascript:;" class="scA mR_12 fontSize_12"id="addfav" 
+		                cp="${base.contextPath}" rid="${item.rid}">收藏</a>
+		              </#if>
+		             <a href="javascript:void(0);" rid ="${item.rid}" appid="${item.appId}" 
+		                   cp="${base.contextPath}"   class="qsA mR_12 fontSize_12" 
+		                   id="delApp" callurl="/recruiter/intentionResume">删除</a>
+		          </p>
+                <#else>
+                    <p class="pT_8 pB_8 pR_8 bgColgrayG textAliRight">
+                   <!--   <span style="float: left;">邀请时间：${item.addTime}</span>  -->
+                     <#if item.isFav==3>
+                        <a href="#" class="scAY mR_12 fontSize_12" id="docancel" 
+                         cp="${base.contextPath}" rid="${item.rid}">已收藏</a>
+                      <#else>
+		              <a href="javascript:;" class="scA mR_12 fontSize_12" id="addfav" 
+		                cp="${base.contextPath}" rid="${item.rid}">收藏</a>
+		              </#if>
+		              <a href="javascript:void(0);" rid ="${item.rid}" appid="${item.appId}" 
+		                   cp="${base.contextPath}"   class="qsA mR_12 fontSize_12" 
+		                   id="delApp" callurl="/recruiter/intentionResume">删除</a>
+		           </p>
+                </#if> 
+             
+            </li>
+            
+         
+            
+        </#list>
+            
+        </ul>
+        
+        <div class="clear"></div>
+        
+       <!--翻页 S-->
+        <div class="movePage">${page.roll}
+            <div class="clear"></div>
+        </div>
+        <!--翻页 E-->
+    </div>
+      
+        
+    </div>
+    
+ 
+
+<!-- -----底部 start------ -->
+ <div id="bottom">
+ <#include "/comm/rec_footer.htm">
+ </div>
+<!-- -----底部 end----- -->
+</body>
+</html>

@@ -1,0 +1,58 @@
+ <!-- 准备下载扣点提示框 -->
+      <div>
+        <input name="rid" type="hidden" id="rid" value="${rid}" cp="${base.contextPath}"/>
+           <p class="pT_40 textAliCenter">&nbsp;
+           <span class="fontSize_24 fontWeiBold fontCol_red">您确定要下载该简历吗？<br/>            
+                                       下载成功后我们将扣取您&nbsp;${points}&nbsp;个网猎币！</span>&nbsp;。
+           </p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+                 value="确认" onclick="confirmDown()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="取消"   class="DialogClose" >
+          </div>
+          
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+ <script type="text/javascript">
+ //确定下载
+ function confirmDown(){
+      var  rid=$("#rid").val();
+      var contextPath = $("#rid").attr("cp");
+      var points=${points};
+      var params={"rid":rid,"isbuy":1,"points":points,"intenjob":""};
+	  var url=contextPath+"/resumemgr/confirmDown";
+	  var options={
+			type:"post", 
+            url:url, 
+            data:params, 
+            dataType:"json", 
+            success:function(rs){
+            	if(rs.result==1){//已经扣点下载成功
+            	    var url=contextPath+"/resumemgr/diag_downsuc";
+            		dialog("下载成功","url:"+url,"500px","auto","");
+            	      setTimeout(function(){
+                         location.reload(true);
+                     },2000); 
+            		 
+            		 
+            	}else if(rs.result==2){ //已经购买，无需再次下载
+            		//dialog("系统提示","text:已经购买，无需再次下载","500px","200px");
+            		var url=contextPath+"/resumemgr/diag_hasbuy";
+            		dialog("温馨提示","url:"+url,"500px","auto","");
+            	}else if(rs.result==3){	//该简历已存在待下载页面，无需重复下载 
+            	    //dialog("系统提示","text:该简历已存在待下载页面，无需重复下载","500px","200px");	
+            	    var url=contextPath+"/resumemgr/diag_hasDown";
+            		dialog("温馨提示","url:"+url,"500px","auto","");
+                }else if(rs.result==-1){	 
+            	    dialog("温馨提示","text:网猎币余额不足，无法下载！","500px","200px");	
+                } 
+            }
+          };
+      $.ajax(options);
+  } 
+ 
+</script>    

@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 搜索结果列表</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)" 
+              rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1920.css" media="(min-width:1680.1px) and (max-width:1920px)" 
+              rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/common.css" rel="stylesheet" type="text/css" />   
+           
+<script type="text/javascript" src="${recJsPath}/recruiter/index.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery.dialog.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/path.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/index.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_list.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_search.js"></script>
+<script type='text/javascript' src="${recJsPath}/type/selectType.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_view.js"></script>
+
+
+</head>
+<script type="text/javascript">
+  var contextPath = "${contextPath}";
+
+$(document).ready(function() {
+   var initdata={
+     "expIndustryName":"${vo.expIndustryName}",//工作行业
+     "expIndustryId":"${vo.expIndustryId}",//工作行业
+     "expWorkJob":"${vo.expWorkJob}",//期望工作
+     "expWorkJobId":"${vo.expWorkJobId}",//期望工作
+     "expWorkPlaceName":"${vo.expWorkPlaceName}",//期望工作地
+     "expWorkPlaceId":"${vo.expWorkPlaceId}",//期望工作地
+     "keyWord":"${vo.keyWord}",//关键字
+     "keyType":"${vo.keyType}",//类型
+     "minEducation":"${vo.minEducation}",//学历
+     "maxEducation":"${vo.maxEducation}",//学历
+     "minExperience":"${vo.minExperience}",//工作经验
+     "maxExperience":"${vo.maxExperience}",//工作经验
+     "gender":"${vo.gender}",//性别
+     "langSkill":"${vo.langSkill}",//语言能力
+     "minAge":"${vo.minAge}",//年龄
+     "maxAge":"${vo.maxAge}",//年龄
+     "locationPlaceId":"${vo.locationPlaceId}",//居住地
+     "housePlaceId":"${vo.housePlaceId}",//籍贯
+     "workStatus":"${vo.workStatus}",//工作状态
+     "minSalary":"${vo.minSalary}",//薪资
+     "maxSalary":"${vo.maxSalary}",//薪资
+     "minHeight":"${vo.minHeight}",//升高
+     "maxHeight":"${vo.maxHeight}",//身高
+     "drvLicense":"${vo.drvLicense}",//驾照
+     "marriage":"${vo.marriage}",//婚姻状态
+     "workType":"${vo.workType}" ,//工作性质
+     "isDistrict":"${vo.isDistrict}", //绝对匹配
+     "pageNo":"${vo.pageNo}" //页数
+   };
+   $("#searckeybox input[name=keyType]").val(initdata.keyType);
+   $("#searckeybox input[name=pageNo]").val(initdata.pageNo);
+   $("#searckeybox input[name=keyWord]").val(initdata.keyWord);
+   $("#searckeybox input[name=trade_id]").val(initdata.expIndustryId);
+   $("#searckeybox input[name=jobs_id]").val(initdata.expWorkJobId);
+   $("#searckeybox input[name=district_id]").val(initdata.expWorkPlaceId);
+   $("#searckeybox input[name=isDistrict]").val(initdata.isDistrict);
+   $("#searckeybox input[name=educationMin]").val(initdata.minEducation);
+   $("#searckeybox input[name=educationMax]").val(initdata.maxEducation);
+   $("#searckeybox input[name=experienceMin]").val(initdata.minExperience);
+   $("#searckeybox input[name=experienceMax]").val(initdata.maxExperience);
+   $("#searckeybox input[name=gender]").val(initdata.gender);
+   $("#searckeybox input[name=lang]").val(initdata.langSkill);
+   $("#searckeybox input[name=minAge]").val(initdata.minAge);
+   $("#searckeybox input[name=maxAge]").val(initdata.maxAge);
+   $("#searckeybox input[name=residence]").val(initdata.locationPlaceId);
+   $("#searckeybox input[name=household]").val(initdata.housePlaceId);
+   $("#searckeybox input[name=workStatus]").val(initdata.workStatus);
+   $("#searckeybox input[name=wageMin]").val(initdata.minSalary);
+   $("#searckeybox input[name=wageMax]").val(initdata.maxSalary);
+   $("#searckeybox input[name=minHeight]").val(initdata.minHeight);
+   $("#searckeybox input[name=maxHeight]").val(initdata.maxHeight);
+   $("#searckeybox input[name=drvLicense]").val(initdata.drvLicense);
+   $("#searckeybox input[name=marriage]").val(initdata.marriage);
+   $("#searckeybox input[name=nature]").val(initdata.workType);
+      
+ 
+  
+  var curvalue="";
+  if(initdata.keyWord!=""){
+   curvalue=curvalue+initdata.keyWord;
+  }
+  if(initdata.expIndustryName!=""){  //行业名称
+     if(curvalue!=""){
+     curvalue=curvalue+"+"+initdata.expIndustryName;
+     }else{
+     curvalue=curvalue+initdata.expIndustryName;
+     }
+  }
+  if(initdata.expWorkJob!=""){  //期望工作
+      if(curvalue!=""){
+     curvalue=curvalue+"+"+initdata.expWorkJob;
+     }else{
+     curvalue=curvalue+initdata.expWorkJob;
+     }
+  }
+  if(initdata.expWorkPlaceName!=""){  //期望工作地
+    if(curvalue!=""){
+     curvalue=curvalue+"+"+initdata.expWorkPlaceName;
+     }else{
+     curvalue=curvalue+initdata.expWorkPlaceName;
+     }
+  }
+  if(initdata.minEducation!=""&&initdata.maxEducation!=""){  //学历
+   var edu= "("+SelectTypeName(QS_education,initdata.minEducation)+"-"
+             +SelectTypeName(QS_education,initdata.maxEducation)+")"; 
+     if(curvalue!=""){
+       curvalue=curvalue+"+"+edu;
+     }else{
+       curvalue=curvalue+edu;
+      }
+  }
+  if(initdata.minExperience!=""&&initdata.maxExperience!=""){  //经验
+   
+    var exp= "("+SelectTypeName(QS_experience,initdata.minExperience)+"-"
+             +SelectTypeName(QS_experience,initdata.maxExperience)+")";
+     if(curvalue!=""){
+       curvalue=curvalue+"+"+exp;
+     }else{
+       curvalue=curvalue+exp;
+      }
+  }
+  if(initdata.minSalary!=""&&initdata.maxSalary!=""){  //薪资
+   
+   var sal= "("+initdata.minSalary+"-"
+             +initdata.maxSalary+")";
+     if(curvalue!=""){
+       curvalue=curvalue+"+"+sal;
+     }else{
+       curvalue=curvalue+sal;
+     }
+  }
+  if(initdata.workType!=""){  //工作性质
+     var worktypename=SelectTypeName(QS_jobsnature,initdata.workType)
+     if(curvalue!=""){
+       curvalue=curvalue+"+"+worktypename;
+     }else{
+       curvalue=curvalue+worktypename;
+     }
+  }
+   
+  $("#curoptions").html("当前条件："+curvalue);
+   
+
+});
+</script>
+<body  >
+
+ <!-- --------------------------------顶部 start ------------------------- -------------->
+  <div id="top">   
+   <#include "/comm/rec_top.htm">  
+  </div>
+<!-- --------------------------------顶部 end ------------------------------------------>  
+ <div id="searckeybox">
+     
+     <input type="hidden" value="" name="pageNo" id="page">
+     <input name="keyType" type="hidden" id="keyType" value="" />
+     <input name="keyWord" type="hidden" id="keyWord" value="" />
+     <input name="trade_id" id="trade_id" type="hidden" value="" />
+     <input name="jobs_id" id="jobs_id" type="hidden" value="" />
+     <input id="district_id" type="hidden" value="" name="district_id">
+     <input type="hidden" value="" id="educationMin" name="educationMin" />
+     <input type="hidden" value="" id="educationMax" name="educationMax" />
+     <input type="hidden" value="" id="experienceMin" name="experienceMin" />
+     <input type="hidden" value="" id="experienceMax" name="experienceMax" />
+     <input type="hidden" id="gender" name="gender" value="" />
+     <input type="hidden" id="lang" name="lang" value="" />
+     <input type="hidden" value="" name="minAge" >
+     <input type="hidden" value="" name="maxAge" >
+     <input type="hidden" value="" id="residence" name="residence" />
+     <input type="hidden" value="" id="household" name="household"/>
+     <input type="hidden" value="" id="workStatus" name="workStatus" />
+     <input type="hidden" value="" id="wageMin" name="wageMin" />
+     <input type="hidden" value="" id="wageMax" name="wageMax" />
+     <input type="hidden" value="" name="minHeight">
+     <input type="hidden" value="" name="maxHeight">
+     <input type="hidden" value="" id="drvLicense" name="drvLicense" />
+     <input type="hidden" value="" id="marriage" name="marriage" />
+     <input type="hidden" value="" name="nature" id="nature">
+     <input type="hidden" value="" name="isDistrict" id="isDistrict">
+ </div>
+
+<div class="bgColgrayQ pB_15">
+
+    <div class="ConImfBox">
+    	
+    
+		<!--操作栏 S-->
+        <div class="bgColgrayW cjn">
+        <h3 class="fl cwszrrc fontSize_16 fontWeiBold">搜索结果</h3>
+        	<p class="fl YCText" title="" id="curoptions">
+        	   当前条件：
+        	</p>
+            <div class="fr">
+           <input type="checkbox" class="vAlignM qsC" id="checkall"> 全选</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" id="backResearch" cp="${base.contextPath}" class="Asg">修改搜索条件</a> 
+            <!-- <a href="#" class="Apx">排序</a>  -->
+           <!--  <a   href="javascript:;" id="checkall" class="Aqsh" flag="0">全选</a>  -->
+        
+            <a  href="javascript:;" class="Asq" id="addfavall" cp="${base.contextPath}">收藏</a> 
+            <!-- <a href="#" class="Axj">下载</a> -->
+            </div>
+        </div>
+        <!--操作栏 S-->
+        
+        <ul class="MaCenterUl">
+           <#list page.result as item>
+        	<li class="fl bgColgrayW mT_10">
+              <div class="pL_15 pR_15 pT_15 pB_15 posRel">
+                  <div class="pT_8">
+                  <div class="fl posRel Tx T10">
+                  <a href="${base.contextPath}/resumemgr/resumeView?rid=${item.rid}&keyWord=${vo.keyWord}" target="_blank"
+                     rid="${item.rid}" onclick="return beforeView($(this));">  
+                       <#if item.gender==1>
+						<img src="${recResumeImg}${item.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/>
+					  <#else>
+						<img src="${recResumeImg}${item.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_female.gif'"/>
+					  </#if>
+					  <i class="zj_userTx"></i>
+					  </a>
+					  </div>
+                     <div class="fl w_82B">
+                    	<p class="lineHei_170 fontSize_14 fontCol_green YCText">简历编号：${item.rid}</p>
+                        <p class="lineHei_170 fontCol_grayQ"><br />
+                          <#if item.gender==1> 男
+                          <#elseif item.gender==2> 女
+                           </#if> |
+                           ${item.birthday}岁 |
+                           ${item.educationName} |
+                           ${item.experienceName} |
+                           <#if item.workStatus==1>离职
+                           <#elseif item.workStatus==2>在职
+                           </#if> </p>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.expWorkJob}">
+                                                        意向职位：${item.expWorkJob}
+                  </p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.expIndustry}">
+                                                       意向行业：${item.expIndustry}
+                   </p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.expWorkPlace}">
+                                                        期望工作地：${item.expWorkPlace}
+                   </p>
+                 <!--  <p class="lineHei_200 fontSize_14 w_100B YCText">
+                                                              简历刷新日期：${item.refTime}
+                  </p> -->
+                  <div class="Gs" >
+                  <a href="#" id="checkRs" rid="${item.rid}" flag="0"></a>
+                  </div>
+              </div>
+              <p class="pT_8 pB_8 pR_8 bgColgrayG textAliRight">
+                  <#if item.isFav==3> <!-- 已经收藏 -->
+                     <a href="javascript:;" class="scAY mR_12 fontSize_12" id="docancel" 
+                       cp="${base.contextPath}" rid="${item.rid}">已收藏</a>
+                  <#else>
+                   <a href="javascript:;" id="addfav" cp="${base.contextPath}" rid="${item.rid}"
+                 	 class="scA mR_12 fontSize_12">收藏</a>
+                  </#if>
+                  <#if item.downType==1> <!-- 已下载 -->
+                   <a href="javascript:;" class="downloadAY mR_12 fontSize_12" >已下载</a>
+                  <#else>
+                 
+                  <a href="javascript:;" id="download" cp="${base.contextPath}" rid="${item.rid}" 
+                     downtype="0" class="downloadA mR_12 fontSize_12">下载${item.downType} </a>
+                  </#if>
+             
+              
+              </p>
+            </li>
+           
+           </#list> 
+            
+            
+        </ul>
+        
+        <div class="clear"></div>
+        
+        <!--翻页 S-->
+        <div class="movePage">${page.roll}
+            <div class="clear"></div>
+        </div>
+        <!--翻页 E-->
+      
+    </div>
+    
+</div>
+
+<!-- -----底部 start------ -->
+ <div id="bottom">
+  <#include "/comm/rec_footer.htm">
+
+ </div>
+<!-- -----底部 end----- -->
+</body>
+</html>

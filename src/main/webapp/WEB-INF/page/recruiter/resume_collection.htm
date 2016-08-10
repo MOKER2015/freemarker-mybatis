@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 收藏夹</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1920.css" media="(min-width:1680.1px) and (max-width:1920px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/common.css" rel="stylesheet" type="text/css" /> 
+<!--[if lt IE 9]>
+  <script src="${recJsPath}/recruiter/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="${recJsPath}/recruiter/index.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery.dialog.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/index.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_list.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_operate.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_view.js"></script>
+
+</head>
+<body  >
+
+ <!-- --------------------------------顶部 start ------------------------- -------------->
+  <div id="top">   
+   <#include "/comm/rec_top.htm">  
+  </div>
+<!-- --------------------------------顶部 end ------------------------------------------>  
+
+<form id="query" action="${contextPath}/recruiter/resume/collection">
+	<input name="pageNo" type="hidden">
+</form>
+<div class="bgColgrayQ pB_15">
+
+    <div class="ConImfBox">    
+		<!--操作栏 S-->
+        <div class="bgColgrayW cjn">
+        <h3 class="fl cwszrrc fontSize_16 fontWeiBold"><i class="icon_scj"></i>收藏夹</h3>
+            <div class="fr">
+            <!-- <a href="javascipt:void(0)" class="Apx">排序</a> --> 
+            <!-- <a href="javascript:void(0)" id="checkAll"  class="">全选</a>  -->
+             <input type="checkbox" class="vAlignM qsC" id="checkall"> 全选</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <!-- <a href="javascript:void(0)" class="Axj">下载</a>  -->
+            <a href="javascript:void(0)" id="delAll" class="Aqs">删除</a></div>
+        </div>
+        <!--操作栏 S-->
+        
+        <ul class="MaCenterUl">
+        	<#list page.result as item>
+        	<li class="fl bgColgrayW mT_10">
+              <div class="pL_15 pR_15 pT_15 pB_15 posRel">
+                  <div class="pT_8">
+                    <div class="fl posRel Tx">
+                    	<#if item.userinfo.gender==1>
+							<img src="${recResumeImg}${item.userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/>
+						<#else>
+							<img src="${recResumeImg}${item.userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_female.gif'"/>
+						</#if>
+					<a href="${base.contextPath}/resumemgr/resumeView?rid=${item.rid}" target="_blank"
+					 rid="${item.rid}" onclick="return beforeView($(this));">
+                    	<i class="zj_userTx"></i>
+                   	</a>
+					</div>
+					<div class="fl w_82B">
+					   <#if item.dowStatus==1><!-- 已购买 -->
+					   <p class="lineHei_170 fontSize_14 fontCol_green YCText">
+					     <a href="${base.contextPath}/resumemgr/resumeView?rid=${item.rid}" target="_blank" 
+					        rid="${item.rid}" onclick="return beforeView($(this));"
+                           class="fontSize_16 a1_green fontWeiBold">${item.uname}</a>&nbsp;&nbsp;&nbsp;${item.userinfo.mobile}/${item.userinfo.email}</p>
+					   <#elseif item.dowStatus==2&&item.userinfo.linkType==0> <!-- 待下载 -->
+					   <p class="lineHei_170 fontSize_14 fontCol_green YCText">考虑中</p>
+					   <#elseif item.dowStatus==2&&item.userinfo.linkType==1> <!-- 待下载 -->
+					   <p class="lineHei_170 fontSize_14 fontCol_green YCText">接受邀请</p>
+					   <#elseif item.dowStatus==2&&item.userinfo.linkType==2> <!-- 待下载 -->
+					   <p class="lineHei_170 fontSize_14 fontCol_green YCText">不接受邀请</p>
+					   <#else><!--  0=未购买-->
+					   <p class="lineHei_170 fontSize_14 fontCol_green YCText">简历编号：${item.rid}</p>
+					   </#if>
+					   
+					    
+                        <p class="lineHei_170 fontCol_grayQ">
+                         <#if item.userinfo.gender==1> 男
+                          	<#elseif item.userinfo.gender==2> 女
+                           </#if> |
+                           ${item.birthday}岁 |
+                           ${item.degreeName} |
+                           ${item.workExpName} |
+                           <#if item.intension.workingStatus==1>离职
+                           <#elseif item.intension.workingStatus==2>在职
+                           </#if>
+                       </p>
+					</div>
+                    
+                    <div class="clear"></div>
+                  </div>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expWork}">
+                                                        意向职位：${item.intension.expWork}
+                  </p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expIndustry}">
+                                                       意向行业：${item.intension.expIndustry}
+                   </p>
+                  <p class="lineHei_200 fontSize_14 YCText" title="${item.intension.expWorkplace}">
+                                                        期望工作地：${item.intension.expWorkplace}
+                   </p>
+                   <p class="lineHei_200 fontSize_14 YCText fontCol_grayQ" title="">
+                                                              收藏时间：${item.addTime}</p>		
+                  <div class="Gs"><a  href="javascript:void(0)" class="checkItem" rid="${item.rid}" appId="${item.appId}" ></a></div>
+              </div>
+              <#if item.dowStatus==2&&item.userinfo.linkType==1>
+               <p class="pT_8 pB_8 pR_8 bgColgrayO textAliRight">
+             <!--    <span style="float: left">收藏时间：${item.addTime}</span>  -->
+                <#if item.userinfo.mobile!="">
+                 <a href="javascript:void(0);" id="download" cp="${base.contextPath}"  rid ="${item.rid}" 
+                     downtype="0" appId="${item.appId}" class="downloadA mR_12 fontSize_12">下载</a> 
+               </#if>
+               <a href="javascript:void(0);" rel ="${item.rid}" appId="${item.appId}" 
+                   cp="${base.contextPath}"  id="cancelFav"  class="qsA mR_12 fontSize_12">取消收藏</a>
+               </p>
+               <#else>
+                 <p class="pT_8 pB_8 pR_8 bgColgrayG textAliRight">
+                 <!--  <span style="float: left">收藏时间：${item.addTime}</span> -->
+		            <a href="javascript:void(0);" rel ="${item.rid}" appId="${item.appId}"  
+		              cp="${base.contextPath}"  id="cancelFav"  class="qsA mR_12 fontSize_12">取消收藏</a>
+                </p>
+               </#if>
+            
+            </li>
+            </#list>
+             
+        </ul>
+        
+        <div class="clear"></div>
+        
+        <!--翻页 S-->
+        <div class="movePage">${page.roll}
+            <div class="clear"></div>
+        </div>
+        <!--翻页 E-->
+        
+    </div>
+    
+</div>
+
+<!-- -----底部 start------ -->
+ <div id="bottom">
+ <#include "/comm/rec_footer.htm">
+ </div>
+<!-- -----底部 end----- -->
+<script type="text/javascript">
+var contextPath = "${contextPath}";
+
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+ <!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 用户试用报告</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+
+
+</head>
+
+<body> 
+
+<script type="text/javascript">
+  var contextPath = "${contextPath}";
+
+$(function(){
+  selects = $(".sesim");
+  initSelect();
+
+  $('.link_more_s').click(function () {
+    $(this).toggleClass('linkZDHover');
+    $('.arrange_box_top').toggle();
+  })
+   
+});
+//提交
+function confirmReport(){
+
+  
+   var score=$("#changescore option:selected").attr("value");
+   if(score==""){
+     alert("请选择评分");return;
+    }
+   var quality =$("input[name='quality']:checked").val();
+   if(quality==undefined||quality==""){
+     alert("请选择网猎通质量");return;
+   }
+   var matchdeg =$("input[name='matchdeg']:checked").val();
+   if(matchdeg==undefined||matchdeg==""){
+     alert("请选择网猎通匹配度");return;
+   }
+   var response =$("input[name='response']:checked").val();
+   if(response==undefined||response==""){
+     alert("请选择网猎通响应速度");return;
+   }
+   var services =$("input[name='services']:checked").val();
+   if(services==undefined||services==""){
+     alert("请选择网猎通服务是否满意");return;
+   }
+ 
+  var data={
+    "score":score,
+    "quality":quality,
+    "matchdeg":matchdeg,
+    "response":response,
+    "services":services,
+    "requirement":$("#requirement").val(),
+    "solvejob":$("#solvejob").val(),
+    "chargestand":$("#chargestand").val()
+   };
+  
+     $.get("${base.contextPath}/resumemgr/saveReport", data,
+            function (data,textStatus)
+             {   
+               var obj=eval("("+data+")");
+                if(obj.result==1){
+                    alert("提交成功");
+                    window.close();
+                   // $(".DialogClose").click();
+                  }else if(obj.result==2){
+                    alert("你已经提交过使用报告，无需重复提交！");
+                  }     
+             }
+          );
+   
+}
+
+</script>
+<form> 
+<!--头部 S-->
+  <div class="header">
+    <p class="yjfk_title"><i class="icon_yjfk"></i>&nbsp;&nbsp;用户试用报告</p>
+  </div>
+<!--头部 E-->
+
+<p class="gxy">感谢您对网猎通产品的支持，您的宝贵意见将推进我们不断改善，请填写以下试用报告，提交成功后还能获得1000点！</p>
+<div class="UserFBCon">	
+
+    <div class="pf">请您对网猎通进行评分：
+        <span class="verinline width_is100">
+            <select name="ssfw" tag="请选择" id="changescore"  class="sesim">
+                <option value="">请选择</option>
+                <option value="1">1分</option>
+                <option value="2">2分</option>
+                <option value="3">3分</option>
+                <option value="4">4分</option>
+                <option value="5">5分</option>
+                <option value="6">6分</option>
+                <option value="7">7分</option>
+                <option value="8">8分</option>
+                <option value="9">9分</option>
+                <option value="10">10分</option>
+            </select>
+        </span>
+    </div>
+    <dl>
+    	<dt class="fontCol_green fontWeiBold">1、您觉得网猎通的简历质量如何？</dt>
+        <dd><label><input name="quality" value="1" type="radio"> 符合中高端标准，是我想要的；</label></dd>
+        <dd><label><input name="quality" value="2" type="radio"> 简历一般般，没有达到我的要求；</label></dd>
+        <dd><label><input name="quality" value="3" type="radio"> 简历很差，需要优化改进；</label></dd>
+    </dl>
+    <dl>
+    	<dt class="fontCol_green fontWeiBold">2、您觉得网猎通的搜索匹配度如何？</dt>
+        <dd><label><input name="matchdeg" value="1" type="radio"> 精确，匹配度高；</label></dd>
+        <dd><label><input name="matchdeg" value="2" type="radio"> 相对较精确，匹配度一般，需要优化；</label></dd>
+        <dd><label><input name="matchdeg" value="3" type="radio"> 匹配度不高，找不到我需要的人才；</label></dd>
+    </dl>
+    <dl>
+    	<dt class="fontCol_green fontWeiBold">3、您觉得猎手的响应速度如何？</dt>
+        <dd><label><input name="response" value="1" type="radio"> 响应速度快，很专业；</label></dd>
+        <dd><label><input name="response" value="2" type="radio"> 响应一般，有待提高；</label></dd>
+        <dd><label><input name="response" value="3" type="radio"> 响应很慢，不够专业；</label></dd>
+    </dl>
+    <dl>
+    	<dt class="fontCol_green fontWeiBold">4、您对我们的服务满意吗？</dt>
+        <dd><label><input name="services" value="1" type="radio"> 服务到位，态度很好，非常满意；</label></dd>
+        <dd><label><input name="services" value="2" type="radio"> 基本满意；</label></dd>
+        <dd><label><input name="services" value="3" type="radio"> 不太满意，需要改进；</label></dd>
+    </dl>
+    
+    <div class="pB_30 pT_20"><label>您在招聘中高端职位时的需求：</label><textarea id="requirement"></textarea></div>
+    <div class="pB_30"><label>您希望我们帮你解决哪些岗位：</label><textarea id="solvejob"></textarea></div>
+    <div class="pB_30"><label>您可以接受怎样的收费标准：</label><textarea id="chargestand"></textarea></div>
+    
+    
+<!--   <div class="pB_15"><label>其他评价：</label><input type="text"></div>
+   <div class="pB_15"><label>存在问题：</label><input type="text"></div>
+   <div class="pB_15"><label>改进建议：</label><input type="text"></div>
+-->   
+   <div class="textAliCenter pT_20">
+   <input type="button" value="提交" onclick="confirmReport();">
+   </div>
+</div>
+</form>
+<!-- </body>
+</html> -->

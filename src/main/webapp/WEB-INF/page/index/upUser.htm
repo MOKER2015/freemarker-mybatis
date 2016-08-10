@@ -1,0 +1,81 @@
+<#include "/comm/layout.html">
+<@head title="用户管理">
+   <script type="text/javascript" src='${base.contextPath}/resources/js/comm/default-validatebox.js'> </script>
+   <script type="text/javascript" src='${base.contextPath}/resources/js/comm/default-winform.js'> </script>
+</@head>
+<@body>
+ <div data-options="region:'center',border:false">
+  <div class="easyui-tabs" data-options="fit:true,border:false">
+    <div style="padding:10px 0 10px" title='增加用户信息'>
+      <div class="inputTableDiv">
+		<form id="form" method="post" class="easyui-form" action="${base.contextPath}/saveUser" >
+		  <input type="hidden" value="${upUser.id}" name="id"/>
+		  <table class="inputTable">
+			<tr>
+			  <td>用户名: </td>
+			  <td>
+				 <input class="easyui-validatebox formText" type="text" 
+				 name="name" value="${upUser.name}" data-options="required:true"
+				 <#if  status='edit'>readonly="readonly"</#if>  />
+              </td>
+			</tr>
+			<#if  status!='edit'>
+			<tr>
+			<td>密码: </td>
+			  <td>
+				 <input id="password" class="easyui-validatebox formText" type='password' 
+				 name="password" value="${upUser.password}"  />
+			  </td>
+			     <td>重复密码: </td>
+			  <td>
+				 <input id="repassword" class="easyui-validatebox formText" type='password'
+				   name="rpwd"  value="${upUser.password}" />
+ 
+			  </td>  
+			  
+			</tr>
+			</#if>
+		
+			<tr>
+			 <td>内容: </td>
+			  <td>
+				 <input class="easyui-validatebox formText" name="content" value="${upUser.content}" />
+			  </td>
+			</tr>
+
+		  </table>
+		</form>
+	  </div>  
+	</div> 
+   </div>
+  </div>
+  <div data-options="region:'south',border:false" style="background: #e6efff; text-align: right; padding: 5px 5px 5px 15px;">
+	 <a class="easyui-linkbutton loginsubmit" mydata-options="formId:'form'" data-options="iconCls:'icon-ok'" href="javascript:void(0)" style="width:80px">确定</a>
+	 <a class="easyui-linkbutton close" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" style="width:80px">取消</a>
+  </div>
+</@body>
+ <script type="text/javascript">
+ 
+var myform = null;
+ $(function(){
+	myform = new DefaultWinForm();
+	  $('.loginsubmit').click(function(){
+    	var parms = {};
+    	if(typeof $(this).attr('mydata-options') != 'undefined'){
+    		var data = $(this).attr('mydata-options');
+    		parms=eval('({' + data + '})');
+    	}
+      var pwd=$("#password").val();
+      var repwd=$("#repassword").val();
+      if (pwd!=repwd){
+    	  alert('两次输入密码不一致！');
+    	  return false;
+      }
+    	myform.submit(parms);
+	});
+	
+	
+});
+
+
+</script> 

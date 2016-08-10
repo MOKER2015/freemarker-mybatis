@@ -1,0 +1,85 @@
+      <!-- 待下载提示框 -->
+      <div>
+        <input name="rid" type="hidden" id="rid" value="${rid}" cp="${base.contextPath}"/>
+          <p class="pT_20 textAliCenter" >
+             <span>该求职者只接受网上邀请，请您发送意向邀请，</br>求职者回复情况在“意向邀请”查看。
+                                   </span>     
+          </p>
+           <p class="pT_20" style="padding-left: 114px;">
+                                   招聘岗位:  <input type="text"  name="intenjob" value="${RequestParameters.intentJob}" id="intenjob" style="border:grey solid 1px;height: 24px;line-height: 24px;" >                   
+                                       
+          </p>
+		<#if receiveList?? && (receiveList.size() > 0 ) >
+          <p class="pT_20" style="padding-left: 100px;">接收手机号: <select id="receiveMobile" name="receiveMobile" style="width: 153px;border:grey solid 1px;">
+           		<#list receiveList as item>
+           		<option value="${item.mobile}" rel="${item.username}" <#if item.isDefault==1>selected='selected'</#if>>${item.mobile}</option>
+           		</#list>
+           		</select>      
+           		<a href="javascript:void(0)" style="color:#B50003;" id="manageMobile">管理</a>  
+          </p>
+          <#else>
+          <p class="" style="margin-top: 15px; padding-left: 100px;">
+          	<a href="javascript:void(0)" style="color:#B50003;" id="manageMobile">添加手机号</a>方便您实时了解简历处理进度 
+          </p>
+         </#if>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+                 value="发送邀请" onclick="doWaitDown()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="取消"   class="DialogClose" >
+          </div>
+          
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+      
+ <script type="text/javascript">
+ 
+ $(function(){
+	 $("#manageMobile").click(function(){
+		 var rid=$("#rid").val();
+		 var intentJob=$.trim($("#intenjob").val());
+		 $(".FloatBg").remove();
+  		 $(".FloatBox").remove();
+  		 var diagurl="${contextPath}/resumemgr/diagManageMobile";
+  		 dialog("管理手机号","url:"+diagurl,"500px","auto","","",{toResume:1,rid:rid,intentJob:intentJob});	
+	 });
+ });
+ //确定待下载
+ function doWaitDown(){
+      var  rid=$("#rid").val();
+      var intenjob =$("#intenjob").val();
+      var contextPath = $("#rid").attr("cp");
+      var receiveMobile = $("#receiveMobile").val();
+      var receiveName = $("#receiveMobile").find("option:selected").attr("rel");
+      var params={"rid":rid,"isbuy":0,"points":0,"intenjob":intenjob,receiveMobile:receiveMobile,receiveName:receiveName};
+	  var url=contextPath+"/resumemgr/confirmDown";
+	  var options={
+			type:"post", 
+            url:url, 
+            data:params, 
+            dataType:"json", 
+            success:function(rs){
+            	if(rs.result==1){//待下载成功
+            		//dialog("系统提示","text:下载成功","500px","200px");
+            		 url=contextPath+"/resumemgr/diag_Ddownsuc";
+            		dialog("提交下载申请","url:"+url,"500px","auto","");
+            		
+            	}else if(rs.result==2){ 
+            		//dialog("系统提示","text:已经购买，无需再次下载","500px","200px");
+            		 var url=contextPath+"/resumemgr/diag_hasbuy";
+            		dialog("温馨提示","url:"+url,"500px","auto","");
+            	}else if(rs.result==3){	 
+            	    //dialog("系统提示","text:该简历已存在待下载页面，无需重复下载","500px","200px");
+            	      var url=contextPath+"/resumemgr/diag_hasDown";
+            		dialog("温馨提示","url:"+url,"500px","auto","");	
+                }else if(rs.result==-1){	 
+            	    dialog("温馨提示","text:网猎币余额不足，无法下载","500px","200px");	
+                } 
+            }
+          };
+      $.ajax(options);
+  } 
+</script>    

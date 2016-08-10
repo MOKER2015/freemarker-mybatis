@@ -1,0 +1,86 @@
+<#include "/comm/layout.html">
+<@head title="简历管理">
+   <script type="text/javascript" src='${base.contextPath}/resources/js/jquery/jquery.min.js'> </script>
+   <script type="text/javascript" src='${base.contextPath}/resources/js/jquery/jquery.easyui.min.js'> </script>
+</@head>
+<@body>
+<style>
+ui,li {
+list-style: none;
+}
+#news{
+height: 355px;
+overflow: hidden;
+}
+</style>
+<script type="text/javascript">
+$(function() {
+var $this = $("#news");
+var scrollTimer;
+$this.hover(function() {
+clearInterval(scrollTimer);
+}, function() {
+scrollTimer = setInterval(function() {
+scrollNews($this);
+}, 1000);
+}).trigger("mouseleave");
+function scrollNews(obj) {
+var $self = obj.find("ul");
+var lineHeight = $self.find("li:first").height(); 
+$self.animate({
+"marginTop": -lineHeight + "px"
+}, 600, function() {
+$self.css({
+marginTop: 0
+}).find("li:first").appendTo($self);
+})
+}
+})
+</script>
+<div id="news">
+<ul>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="aaaaaaaaaaaaaaa">aaaaaaaaaaaaaaa</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="bbbbbbbbbbbbbbb">bbbbbbbbbbbbbbb</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ccccccccccccccc">ccccccccccccccc</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ddddddddddddddd">ddddddddddddddd</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="eeeeeeeeeeeeeee">eeeeeeeeeeeeeee</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="fffffffffffffff">fffffffffffffff</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ggggggggggggggg">ggggggggggggggg</a></li>
+</ul>
+</div>
+
+
+
+
+
+<!-- <style>
+ui,li {
+list-style: none;
+}
+#news{
+height: 305px;
+overflow: hidden;
+}
+</style>
+<script type="text/javascript">
+function autoScroll(obj, ul_bz){
+$(obj).find(ul_bz).animate({
+marginTop : "-25px"
+},500,function(){
+$(this).css({marginTop : "0px"}).find("li:first").appendTo(this);
+});
+}
+setInterval('autoScroll("#oDiv", "#oUl")',3000)
+</script>
+<div id="oDiv">
+<ul id="oUl">
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="aaaaaaaaaaaaaaa">aaaaaaaaaaaaaaa</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="bbbbbbbbbbbbbbb">bbbbbbbbbbbbbbb</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ccccccccccccccc">ccccccccccccccc</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ddddddddddddddd">ddddddddddddddd</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="eeeeeeeeeeeeeee">eeeeeeeeeeeeeee</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="fffffffffffffff">fffffffffffffff</a></li>
+<li><a href="#" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" rel="external nofollow" title="ggggggggggggggg">ggggggggggggggg</a></li>
+</ul>
+</div> -->
+</@body>

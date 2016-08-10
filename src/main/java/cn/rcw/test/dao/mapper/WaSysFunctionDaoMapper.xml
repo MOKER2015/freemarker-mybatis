@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.rcw.test.dao.WaSysFunctionDao" >
+  <resultMap id="BaseResultMap" type="cn.rcw.test.entity.WaSysFunction" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="RARENT_ID" property="prarentId" jdbcType="INTEGER" />
+    <result column="RARENT_IDS" property="prarentIds" jdbcType="VARCHAR" />
+    <result column="PERNISSION" property="pernission" jdbcType="VARCHAR" />
+    <result column="sorting" property="sorting" jdbcType="INTEGER" />
+    <result column="AVAILABLE" property="available" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="cn.rcw.test.entity.WaSysFunction" extends="BaseResultMap" >
+    <result column="DESCRIPTION" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, TYPE, URL, ICON, RARENT_ID, RARENT_IDS, PERNISSION, sorting, AVAILABLE
+  </sql>
+  <sql id="Blob_Column_List" >
+    DESCRIPTION
+  </sql>
+  
+  <select id="getAllsysFunc" resultMap="BaseResultMap" resultType="cn.rcw.test.entity.WaSysFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    from wa_sys_function
+    where 1=1
+   	<if test="funcId!=null">
+			AND RARENT_ID = #{funcId}
+	</if>
+	 <if test="available!=null">
+			AND AVAILABLE = #{available}
+	</if>
+	 
+	order by SORTING
+  </select>
+  <!-- 获取菜单，不包括按钮 -->
+   <select id="getMenuFunc" resultMap="BaseResultMap" resultType="cn.rcw.test.entity.WaSysFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    from wa_sys_function
+    where 1=1
+   	<if test="funcId!=null">
+			AND RARENT_ID = #{funcId}
+	</if>
+	 <if test="available!=null">
+			AND AVAILABLE = #{available}
+	</if>
+	and TYPE!='button'
+	order by SORTING
+  </select>
+  
+    <select id="getAllroleFunc" resultMap="BaseResultMap" resultType="cn.rcw.test.entity.WaSysFunction" >
+  select  IFNULL(d.ROLE_ID,0) flag,
+      t.* from wa_sys_function t 
+       LEFT JOIN wa_sys_rolefunc d 
+       on t.ID=d.FUNC_ID and d.ROLE_ID=#{roleid} 
+   	where 1=1 
+	 <if test="available!=null">
+			AND t.AVAILABLE = #{available}
+	</if>
+	order by t.SORTING
+  </select>
+  
+  <select id="getAllByPrarentId" resultMap="BaseResultMap" resultType="cn.rcw.test.entity.WaSysFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    from wa_sys_function
+    where TYPE = #{type,jdbcType=VARCHAR} and RARENT_ID = #{prarentId,jdbcType=INTEGER}
+    order by SORTING
+  </select>
+  
+  <select id="getByPrarentId" resultMap="BaseResultMap" resultType="cn.rcw.test.entity.WaSysFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    from wa_sys_function s where s.TYPE = #{ type} and s.RARENT_ID = #{ prarentId} and exists(
+        select f.RARENT_IDS from wa_sys_function f,wa_sys_rolefunc rf,wa_sys_user_role r
+        where f.ID = rf.FUNC_ID and rf.ROLE_ID = r.ROLE_ID  and r.USER_NAME = #{ username}
+        AND (FIND_IN_SET(s.ID,f.RARENT_IDS) or s.ID = f.ID)
+    )
+    order by SORTING
+  </select>
+  
+  <select id="getById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wa_sys_function
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getPage" resultMap="ResultMapWithBLOBs" resultType="cn.rcw.test.entity.WaSysFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wa_sys_function
+    where ID = #{id,jdbcType=INTEGER}
+    order by SORTING
+  </select>
+  
+  <select id="findPermissions" resultType="java.lang.String" >
+    select f.PERNISSION from wa_sys_function f,wa_sys_rolefunc rf,wa_sys_user_role r
+    where f.ID = rf.FUNC_ID and rf.ROLE_ID = r.ROLE_ID  and r.USER_NAME = #{ username} 
+  </select>
+  
+  <select id="findAllPermissions" resultType="java.lang.String" >
+    select f.PERNISSION from wa_sys_function f
+  </select>
+  
+  <delete id="deleteByIds" parameterType="java.util.List" >
+     delete from wa_sys_function
+    where ID in 
+    <foreach collection="list" item = "id" open="(" separator="," close=")">
+         #{ id} 
+    </foreach>  
+  </delete>
+  <insert id="insert" parameterType="cn.rcw.test.entity.WaSysFunction" >
+    insert into wa_sys_function
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="icon != null" >
+        ICON,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="prarentId != null" >
+        RARENT_ID,
+      </if>
+      <if test="prarentIds != null" >
+        RARENT_IDS,
+      </if>
+      <if test="pernission != null" >
+        PERNISSION,
+      </if>
+      <if test="sorting != null" >
+        sorting,
+      </if>
+      <if test="available != null" >
+        AVAILABLE,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="prarentId != null" >
+        #{prarentId,jdbcType=INTEGER},
+      </if>
+      <if test="prarentIds != null" >
+        #{prarentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="pernission != null" >
+        #{pernission,jdbcType=VARCHAR},
+      </if>
+      <if test="sorting != null" >
+        #{sorting,jdbcType=INTEGER},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="cn.rcw.test.entity.WaSysFunction" >
+    update wa_sys_function
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="prarentId != null" >
+        RARENT_ID = #{prarentId,jdbcType=INTEGER},
+      </if>
+      <if test="prarentIds != null" >
+        RARENT_IDS = #{prarentIds,jdbcType=VARCHAR},
+      </if>
+      <if test="pernission != null" >
+        PERNISSION = #{pernission,jdbcType=VARCHAR},
+      </if>
+      <if test="sorting != null" >
+        sorting = #{sorting,jdbcType=INTEGER},
+      </if>
+      <if test="available != null" >
+        AVAILABLE = #{available,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

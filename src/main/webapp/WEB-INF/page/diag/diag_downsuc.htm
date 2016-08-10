@@ -1,0 +1,25 @@
+      <!--已下载成功-->
+      <div>
+          <p class="pT_40 textAliCenter">
+            <img src="${recImagePath}/recruiter/icon_g.png" alt=""/>&nbsp;&nbsp;
+                                      购买成功，请在已下载简历列表查看
+          </p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="查看已下载" onclick="doviewdown()">
+          </div>
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+      
+ <script type="text/javascript">
+ 
+ //查看已经下载
+ function doviewdown(){
+   window.location.href="${base.contextPath}/recruiter/hasDownLoad";
+  }
+  
+ 
+
+</script>  

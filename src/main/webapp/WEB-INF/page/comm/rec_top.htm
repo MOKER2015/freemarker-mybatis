@@ -1,0 +1,103 @@
+<!--头部 S-->
+  <div class="header">
+    <div class="fl logo">
+    <a href="${contextPath}/recruiter/index">
+    <img src="${recImagePath}/recruiter/logo.png"/>
+    </a></div>
+    <div class="fl">
+    <a href="http://www.job001.cn/" class="topA mR_5">国际人才网首页</a>
+    <a href="http://www.job001.cn/user/company/company_index.php" class="topA">企业管理中心</a></div>
+    <div class="fr">
+     <p class="fl mT_12 mR_12 loginComA fontCol_white">您好，${companyName}</p>
+      <div class="fl mT_12 mR_12 homeA ">
+        <a href="${contextPath}/recruiter/index" title="管理中心首页">&nbsp;</a>
+      </div>
+      <div class="fl mT_12 mR_12 posRel messageA">
+      <a href="${contextPath}/recruiter/message" title="未读消息" id="noread"></a>
+        
+      </div>
+      <div class="fl mT_12 mR_12 userGNA " id="show" onmouseover="showwin()"  >
+      <a href="" title="账户管理" class="userGNAa">&nbsp;</a>
+       <ul class="ComXL">
+            <!--下拉菜单-->
+            <li><a href="javascript:void(0)" style="background-image: none" class="manageMobile icon_exit">手机号管理</a></li>
+            <li><a href="${contextPath}/recruiter/exit" class="icon_exit">安全退出</a></li>
+          </ul>
+      </div>
+     <!--  <ul class="ComXL" style="display:none;top:45px" id="exit">
+        
+        <li style="height: 10px;background-color: #54BACC"></li> 
+        <li><a href="${contextPath}/recruiter/exit" class="icon_exit">安全退出</a></li>
+       </ul> -->
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+<!--头部 E-->
+
+ <div class="nav">
+  	<ul class="fl">
+    	<li><a <#if menu=="hasDownLoad">class="sz"</#if> href="${contextPath}/recruiter/hasDownLoad">已下载简历</a>|</li>
+        <li><a <#if menu=="intentionResume">class="sz"</#if> href="${contextPath}/recruiter/intentionResume">意向邀请</a>|</li>
+        <li><a <#if menu=="ResumeSearch">class="sz"</#if> href="${contextPath}/recruiter/ResumeSearch" >高级搜索</a>|</li>
+        <li><a <#if menu=="collection">class="sz"</#if> href="${contextPath}/recruiter/resume/collection">收藏夹</a>|</li>
+        <li><a <#if menu=="recycle">class="sz"</#if> href="${contextPath}/recruiter/resume/recycle">回收站</a></li>
+       
+    </ul>
+   <div class="fl yjfkA"><a href="${contextPath}/recruiter/feedback"  target="_blank">
+         <i class="icon_yjfks"></i>意见反馈</a></div>
+     <!-- <div class="fl yjfkA"><a href="${contextPath}/recruiter/report" target="_blank" >
+     <i class="icon_yjfks"></i>试用报告</a></div> -->
+    <div class="fr jnss">
+       <input id="keyword" type="text">
+      <input type="button" onclick="searchResume()" value="简历搜索"></div>
+    </div>
+ <script type="text/javascript">
+  function searchResume(){
+   var key=$("#keyword").val();
+   var url="${contextPath}/recruiter/resumeSearch_list?keyType=0"+
+   "&keyWord="+key;
+   window.location.href=url;
+  }
+  
+  function showwin(){
+   $("#exit").show();
+  }
+
+/*   $(function(){
+	$("#show").mouseover(function(){
+	}).mouseout(function(){
+		$("#exit").mouseenter(function(){
+			 $("#exit").show();
+			 return;
+		});
+		 $("#exit").hide();
+	}); 
+  $("#exit").mouseout(function(){
+  		 $("#exit").hide();
+  }).mouseover(function(){
+  $("#exit").show();
+	});
+  }); */
+  
+$(function(){  
+   //查询消息条数
+   $.get("${base.contextPath}/resumemgr/getMsgCount", 
+            function (data,textStatus)
+             {   
+               var obj=eval("("+data+")");
+                if(obj.result>0){
+                  var msgcount="<span id=\"noread\">"+obj.result+"</span><i></i>";
+                   $("#noread").html(msgcount);
+                  }     
+             }
+          );
+   
+   
+   $(".manageMobile").click(function(){
+	   params={};
+	   var diagurl="${contextPath}/resumemgr/diagManageMobile";
+	   dialog("管理手机号","url:"+diagurl,"500px","auto","","",params);	
+   });
+});
+ </script>

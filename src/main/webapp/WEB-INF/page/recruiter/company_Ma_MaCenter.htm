@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 企业管理中心首页</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1024.css" media="(max-width:1024px)" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/resolution1920.css" media="(min-width:1680.1px) and (max-width:1920px)" 
+       rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/common.css" rel="stylesheet" type="text/css" />   
+       
+<script src="${recJsPath}/comm/jquery.js" type='text/javascript' ></script>
+<script src="${recJsPath}/recruiter/jquery.dialog.js" type="text/javascript" ></script>
+<script src="${recJsPath}/recruiter/index.js" type='text/javascript' ></script>
+<script src="${recJsPath}/recruiter/resume_list.js" type='text/javascript'></script>
+<script src="${recJsPath}/recruiter/resume_view.js"  type='text/javascript' ></script>
+
+</head>
+<script type="text/javascript">
+  var contextPath = "${contextPath}";
+
+$(document).ready(function(){
+    //选中点击
+    $("#nextPage").die().live("click",function(){
+        
+    	var curPageNo=$(this).attr("size"); 
+        $(this).attr("size",parseInt(curPageNo)+1);
+        var newpage=$(this).attr("size");
+        var url="${base.contextPath}/recruiter/index?pageNo="+newpage;
+    	window.location.href=url;  
+    });	
+    <#if existEntMobile?? && !existEntMobile>
+    	var diagurl="${contextPath}/resumemgr/diagManageMobile";
+ 	 	dialog("管理手机号","url:"+diagurl,"500px","auto","","",{});
+    </#if>
+    
+});
+</script>
+ 
+
+<!-- onload="head.loadTop('${base.contextPath}/recruiter/top');head.loadBottom('${base.contextPath}/recruiter/footer');" -->
+<body >
+<!-- <form> -->
+<!--头部 S-->
+<!-- --------------------------------顶部 start ------------------------- -------------->
+  <div id="top">   
+  <#include "/comm/rec_top.htm">
+  
+  </div>
+<!-- --------------------------------顶部 end ------------------------------------------>  
+  <div class="bgColgrayQ pT_15 pB_15">
+  
+      <div class="bgColgrayW ComImf">
+        <div class="fl Comlogo">
+        	<div><img src="${recCompanyImg}${company.img}"/></div>
+            <div class="mT_10">
+             <#if company.isauth==1>
+             <span class="yzz mR_12 fontCol_green fontSize_12">已认证</span>
+            <#else>
+             <span class="yzz mR_12 fontCol_green fontSize_12">未认证</span>
+            </#if>
+             <#if company.wxauth==1>
+               <span class="weixinYbd fontCol_green">微信已绑定</span></div>
+             <#else>
+               <span class="weixinYbd fontCol_green">微信未绑定</span></div>
+             </#if>
+           
+        </div>
+        <div class="fl pL_15">
+          <p class="fontSize_16 fontWeiBold">${company.companyName}</p>
+          <p class="mT_12 fontSize_14 lineHei_170">联系人：${company.linkman} <a class="btnEmailBd pL_10 pR_10 manageMobile"  href="javascript:void(0)">手机号码管理</a><br />
+            电话：${company.tel}<br />
+            邮箱：${company.email} 
+            <a href="#" class="btnEmailBd" style="display:none;">邮箱绑定</a>
+            <a href="#" class="btnEmailBd bgColgrayS pL_10 pR_10" style="display:none;">邮箱已绑定</a>
+         </p>
+        </div>
+        <div class="fr textAliRight">
+         <!--  <p><a href="#" class="EditInfA fontSize_12">编辑资料</a></p> -->
+          <p class="mT_40 fontSize_18 fontCol_red fontWeiBold">
+                              网猎币：
+          <#if fi.balance??>
+            ${fi.balance}
+          <#else>
+            0
+          </#if> 
+           </p>
+          <p class="mT_12 fontSize_14 fontCol_grayQ">
+                                本月已使用：
+          <#if useredpoints??>
+             ${useredpoints}
+          <#else>
+            0
+          </#if>
+          &nbsp;&nbsp;
+         <!--  <a href="#" class="btnQB">充 币</a></p> -->
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="cwszrrc"><span class="fl fontSize_16 fontWeiBold">猜你想找的人才</span>
+        <a href="javascript:;" class="fr fontSize_12" id="nextPage"  size="${page.pageNo}" >换一批 &gt;</a> 
+        </h3>
+        <ul class="MaCenterUl">
+          <#list page.result as item>
+	        <li class="fl bgColgrayW mT_10">
+	            <div class="pL_15 pR_15 pT_15 pB_15">
+	              <div class="pT_8">
+	                    <div class="fl posRel Tx">
+	                    <a href="${base.contextPath}/resumemgr/resumeView?rid=${item.rid}" target="_blank"
+	                        rid="${item.rid}" onclick="return beforeView($(this));">
+	                        <#if item.gender==1>
+							 <img src="${recResumeImg}${item.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/>
+				            <#else>
+							 <img src="${recResumeImg}${item.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_female.gif'"/>
+				            </#if>
+	                    <i class="zj_userTx"></i>
+	                    </a>
+	                    </div>
+	                    <div class="fl w_82B">
+	                    	<p class="lineHei_170 fontSize_14 fontCol_green YCText">
+	                    	简历编号：${item.rid}
+	                    	</p>
+	                        <p class="lineHei_170 fontCol_grayQ">
+	                        <#if item.gender==1> 男
+                             <#elseif item.gender==2> 女
+                             </#if>| 
+                             ${item.educationName}| 
+                             ${item.experienceName}|
+                            <#if item.workStatus==1>离职
+                            <#elseif item.workStatus==2>在职
+                             </#if>
+	                        </p>
+	                    </div>
+	                    <div class="clear"></div>
+	                  </div>
+	              <p class="lineHei_200 fontSize_14 YCText" title="${item.expWorkJob}">
+	                                                        意向职位：${item.expWorkJob}</p>
+	                  <p class="lineHei_200 fontSize_14 YCText" title="${item.expIndustry}">
+	                                                       意向行业：${item.expIndustry}</p>
+	                  <p class="lineHei_200 fontSize_14 YCText" title="${item.expWorkPlace}">
+	             	        期望工作地：${item.expWorkPlace}</p>
+	            </div>
+	            <p class="pT_8 pB_8 pR_8 bgColgrayG textAliRight">
+	            <#if item.isFav==3> <!-- 已经收藏 -->
+	              <a href="javascript:;" class="scAY mR_12 fontSize_12" id="docancel" 
+                    cp="${base.contextPath}" rid="${item.rid}">已收藏</a>
+	            <#else>
+	             <a href="javascript:;" class="scAY mR_12 fontSize_12"
+               		 id="addfav" cp="${base.contextPath}" rid="${item.rid}">收藏</a>
+	            </#if>
+	            <#if item.downType==1> <!-- 已经下载 -->
+	             <a href="javascript:;" class="downloadAY mR_12 fontSize_12" >已下载</a>
+	            <#else>
+	             <a href="javascript:;" class="downloadAY mR_12 fontSize_12" id="download" downtype="0"
+           			 cp="${base.contextPath}" rid="${item.rid}">下载</a>
+	            </#if>
+           		
+	            </p>
+	          </li>
+          
+          
+         </#list>  
+        
+        </ul>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="clear"></div>
+<!-- -----底部 start------ -->
+ <div id="bottom">
+  <#include "/comm/rec_footer.htm">
+ </div>
+<!-- -----底部 end----- -->
+<!-- </form> -->
+</body>
+</html>

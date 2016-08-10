@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>个人简历详情页</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/common.css" rel="stylesheet" type="text/css" />   
+
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery.dialog.js"></script>
+<script type='text/javascript' src="${recJsPath}/recruiter/resume_list.js"></script>
+<script type="text/javascript" src="${recJsPath}/recruiter/select_common.js"></script>
+
+<style type="text/css">
+	body {background-color:#E1E1E1;}
+</style>
+</head>
+
+<body>
+	<div class="bgColgrayG mAuto w_1002">
+    	
+        <!--L S-->
+    	<div class="fl bgColgrayG w_30B">
+        	<div class="mT_25 textAliCenter"><a href="${base.contextPath}/recruiter/index">
+        	   <img src="${recImagePath}/recruiter/logo_pre.png"/>
+        	   </a>
+            </div>
+            <p class="mT_12 fontCol_white textAliCenter">
+                                            简历编号：${resume.rid}&nbsp;&nbsp;<br>
+                                           <!--  刷新时间：${resume.lrefTime} -->
+            </p>
+            <div class="mAuto PerTX posRel">
+            <#if userinfo.gender==1>
+				 <img src="${recResumeImg}${userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/>
+			<#else>
+				<img src="${recResumeImg}${userinfo.photoPath}" onerror="this.src='${recImagePath}/recruiter/userTX_female.gif'"/>
+			</#if>
+               <!-- <img src="${recResumeImg}${userinfo.photoPath}"
+                 onerror="this.src='${recImagePath}/recruiter/userTX_male.gif'"/> -->
+             <i class="Perzj_userTx">
+             </i>
+             <#if buyflag==true> 
+            <h1 class="fontSize_24 fontCol_white textAliCenter Name">${userinfo.baseInfoName}</h1>
+            <#else>
+             <h1 class="fontSize_24 fontCol_white textAliCenter Name"></h1>
+            </#if>
+           </div>
+            <#if buyflag==true>            
+             <p class="PreCall fontCol_green fontWeiBold">${userinfo.mobile} / ${userinfo.email}</p>
+            <#else>
+            <p class="PreCall fontCol_green fontWeiBold">未购买该简历，无法显示联系方式</p>
+            </#if>
+            <p class="fontCol_white pL_15 pR_15 pT_8 lineHei_170">
+                                       意向职位：${intersion.expWork}
+            </p>
+             <!-- 基本信息 -->  
+            <div class="PerL mT_40">
+            	<h2 class="mAuto fontSize_16">基本信息</h2>
+                <p><#if userinfo.gender==1>男 <#else>女</#if>  
+                  <#if userinfo.height gt 0>
+                     | ${userinfo.height}cm
+                   <#else>
+                   </#if>
+                  
+                  | ${userinfo.birthday}岁 
+                  | ${userinfo.degreenName}
+                  | <#if userinfo.marry==1>未婚<#else>已婚</#if>  
+                  | <#if intersion.workingStatus==1>离职
+                    <#elseif intersion.workingStatus==2>在职
+                    </#if>
+                  </p>
+                <p>工作经验：${userinfo.workYear}</p>
+                <p>现居住地：${userinfo.adress}</p>
+                <p>籍贯：${userinfo.household}</p>
+                <p>浏览次数：${resume.views}</p>
+            </div>
+              <!-- 求职意向 -->  
+            <div class="PerL mT_40">
+            	<h2 class="mAuto fontSize_16">求职意向</h2>
+                <p>期望岗位性质：
+                   <#if intersion.jobNature=="1">全职 
+                    <#elseif intersion.jobNature=="2">兼职
+                    <#elseif intersion.jobNature=="3">实习 </#if>
+                </p>
+                <p>期望工作地：${intersion.expWorkplace}</p>
+                <p>期望月薪：${intersion.expSalary}</p>
+                <p>期望从事的行业：${intersion.expIndustry}</p>
+            </div>
+             <!-- 自我描述 -->   
+            <div class="PerL mT_40 pB_50">
+            	<h2 class="mAuto fontSize_16">自我描述</h2>
+                <p>${self.selfAssessment}</p>
+            </div>
+        
+        </div>
+        <!--L E-->
+        
+        <!--R S-->
+        <div class="fr w_60B bgColgrayW pL_2B pR_2B pB_15">
+            <!-- 头部 -->  
+        	<div class="mT_25" id="operaBar">
+            	<div class="fl PerbtnG">
+            	<#if  favflag==true ><!-- 已经收藏 -->
+            	 <a href="javascript:void(0);" class="icon_scj">已收藏</a>
+            	<#else>
+            	<a href="javascript:void(0);" class="icon_scj" id="addfav"
+            	  cp="${base.contextPath}" rid="${resume.rid}" >收藏夹</a>
+            	</#if>
+            	
+            	<a href="javascript:void(0)" id="printResume" class="icon_dyjn">打印简历</a>
+            	<a href="javascript:void(0)" id="downloadResume" rid="${resume.rid}" class="icon_dqjn">导出简历</a>
+            	<a href="javascript:void(0)" id="alertResume" rid="${resume.rid}" uname="${userinfo.baseInfoName}" class="icon_jnbj">简历报警</a>
+            	</div>
+                <div class="fr">
+                 <#if  buyflag==true > <!-- 已经购买 -->  
+                  <a href="javascript:void(0);" class="btn_buy">已下载简历</a>
+                 <#else><!-- 未购买 --> 
+                  <a href="javascript:;" class="btn_buy" downtype="0"
+                  id="download" cp="${base.contextPath}" rid="${resume.rid}" >购买简历</a>
+                 </#if>
+                </div>
+            </div>
+            <div class="clear"></div>
+            
+            <!--工作经历 S-->
+            <#if workexp.size() gt 0>
+            	<h2 class="PerK fontSize_16">
+            	<i class="icon_gzjn">&nbsp;</i>工作经历</h2>
+                <div>
+                 <#list workexp as work>
+                	<div class="PerTitle">
+                    	<div class="fl">
+                    	${work.expStart} - <#if work.expEnd==9999>至今<#else>${work.expEnd}</#if>
+                    	</div>
+                        <p class="fl mL_15">${work.comName}</p>
+                        <p class="fr">${work.jobName}</p>
+                    </div>
+                    
+                    <p class="PerCon">工作职责：<br />
+				     ${work.workDesc}
+				    </p>
+				 </#list>    
+                	
+                </div>
+                </#if>
+            <!--工作经历 E-->
+            
+            <!--教育经历 S-->
+            <#if eduList.size() gt 0>
+            	<h2 class="PerK fontSize_16">
+            	<i class="icon_zyjn">&nbsp;</i>教育经历</h2>
+                <div>
+                <#list eduList as edu>      
+                	<div class="PerTitle">
+                    	<div class="fl">
+                    	${edu.eduStart} - <#if edu.eduEnd==9999>至今<#else>${edu.eduEnd}</#if>
+                    	</div>
+                        <p class="fl mL_15">${edu.college}</p>
+                        <p class="fr">（${edu.major}）${edu.degreeName}</p>
+                    </div>
+                    <p class="PerCon">专业描述：<br />
+                         ${edu.description}                     
+                    </p>
+               </#list>
+               
+                </div>
+                </#if>
+            <!--教育经历 E-->
+            
+            <!--培训经历 S-->
+              <#if trainingList.size() gt 0>
+            	<h2 class="PerK fontSize_16"><i class="icon_pxjn">&nbsp;</i>培训经历</h2>
+                <div>
+                 <#list trainingList as tra> 
+                	<div class="PerTitle">
+                    	<div class="fl">
+                    	 ${tra.trainingStart} - <#if tra.trainingEnd==9999>至今<#else>${tra.trainingEnd}</#if>
+                    	 </div>
+                        <p class="fl mL_15">${tra.institution}</p>
+                        <p class="fr">${tra.course}</p>
+                    </div>
+                    <p class="PerCon">培训描述：<br />
+                       ${tra.detail}
+                    </p>
+                 </#list>
+                </div>
+               </#if>
+            <!--培训经历 E-->
+            
+            <!--项目经验 S-->
+             <#if projectList.size() gt 0>
+            	<h2 class="PerK fontSize_16"><i class="icon_xmjn">&nbsp;</i>项目经验</h2>
+                <div>
+                   <#list projectList as pro> 
+                	<div class="PerTitle">
+                    	<div class="fl">
+                          ${pro.projectStart}至 <#if pro.projectEnd==9999>至今<#else>${pro.projectEnd}</#if> 
+                        </div>
+                        <p class="fl mL_15">${pro.projectName}</p>
+                    </div>
+                    <p class="PerCon">
+                                                       项目描述：<br />
+                       ${pro.projDesc}<br />
+                                                       项目职责：<br />
+                        ${pro.resp}</p>
+                   </#list>
+                     
+                     </div>
+                </#if>     
+            <!--项目经验 E-->
+            
+            <!--语言技能 S-->
+            <#if langSkillsList.size() gt 0>
+            	<h2 class="PerK fontSize_16"><i class="icon_yyjn">&nbsp;</i>语言技能</h2>
+                <div>
+                 <#list langSkillsList as lang> 
+                	<div class="PerTitle">
+                    	<div class="fl">${lang.langName}</div>
+                        <p class="fl mL_15 fontColBlack">${lang.levelName}</p>
+                    </div>
+                    <p class="PerCon2">&nbsp;</p>
+                 </#list> 
+                  
+                </div>
+              </#if>
+            <!--语言技能 E-->
+            
+            <!--专业技能 S-->
+             <#if specialtyList.size() gt 0>
+            	<h2 class="PerK fontSize_16"><i class="icon_jyjn">&nbsp;</i>专业技能</h2>
+                <div>
+                <#list specialtyList as spe> 
+                	<div class="PerTitle">
+                    	<div class="fl">${spe.tech}</div>
+                        <p class="fl mL_15 fontColBlack">${spe.level}</p>
+                    </div>
+                    <p class="PerCon2">&nbsp;</p>
+                </#list>    
+               </div>
+              </#if>
+            <!--专业技能 E-->
+
+            <!--版权所有 S-->
+            <div class="textAliCenter fontSize_12 fontCol_grayQ pT_70">中山市才通天下信息科技有限公司 经营许可证：
+	            <a href="http://www.job001.cn/hd/200912/10/index.html" class="fontCol_grayQ">
+	                                                 粤B2-20070196</a> 
+	            <a href="http://www.miibeian.gov.cn/" target="_blank" 
+	            class="fontCol_grayQ">粤ICP备10003178号</a>
+            </div>
+            <!--版权所有 E-->
+          </div>
+        <!--R E-->
+    
+    <div class="clear"></div>
+	</div>
+	
+<script type="text/javascript">
+$(function(){
+	//导出简历
+	$("#downloadResume").click(function(){
+		window.location.href = "${contextPath}/recruiter/resume/downloadResume?rid="+$(this).attr("rid");
+	});
+	
+	//打印
+	$("#printResume").click(function(){
+		var body = $("body").html();
+		$("#operaBar").remove();
+		window.print();
+		$("body").html(body);
+	});
+	//举报简历
+	$("#alertResume").click(function(){
+		var title="举报信息";
+		var rid = $(this).attr("rid");
+		var uname = $(this).attr("uname");
+		
+		var width="400px";
+		var url="${contextPath}/recruiter/resume/getReportDialog";
+// 		dialog("收藏成功","url:"+url,"500px","auto","");
+		dialog(title,"url:"+url,width,"auto","","",{rid:rid,uname:uname});
+	});
+})
+</script>
+</body>
+</html>

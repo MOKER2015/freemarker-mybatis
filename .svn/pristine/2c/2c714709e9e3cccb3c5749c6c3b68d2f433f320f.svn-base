@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网猎通 意见反馈</title>
+<link rel="shortcut icon" href="${recImagePath}/recruiter/favicon.ico" />
+<link href="${recCssPath}/recruiter/reset.css" rel="stylesheet" type="text/css">
+<link href="${recCssPath}/recruiter/layout.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="${recJsPath}/recruiter/jquery-1.7.1.min.js"></script>
+
+</head>
+
+<body>
+<form>
+  <!--头部 S-->
+  <div class="header">
+    <p class="yjfk_title"><i class="icon_yjfk"></i>&nbsp;&nbsp;意见反馈</p>
+  </div>
+  <!--头部 E-->
+  <div class="yjfk_con">
+  	<p>您对网猎通平台还满意吗？真诚欢迎您对我们的产品提出宝贵的意见或建议,我们将尽力完善!</p>
+    <div><textarea id="context"></textarea></div>  
+    <div class="textAliCenter pT_20"><input type="button" value="提交" onclick="confirmfeedBack();"></div>
+  </div>
+  
+</form>
+</body>
+</html>
+<script type="text/javascript">
+ //确认提交 
+ function confirmfeedBack(){
+  var data={ "backcontext":$("#context").val()};
+  $.get("${base.contextPath}/resumemgr/saveFeedback", data,
+            function (data,textStatus)
+             {   
+               var obj=eval("("+data+")");
+                if(obj.result==1){
+                    alert("提交成功");
+                    window.close();
+                  }      
+             }
+          );
+ } 
+</script>

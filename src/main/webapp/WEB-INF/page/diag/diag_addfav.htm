@@ -1,0 +1,21 @@
+      <!-- 收藏成功弹窗 -->
+      <div>
+          <p class="pT_40 textAliCenter">
+            <img src="${recImagePath}/recruiter/icon_g.png" alt=""/>&nbsp;&nbsp;简历收藏成功!
+          </p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="查看收藏夹" onclick="doviewAddfav()">
+          </div>
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+      
+ <script type="text/javascript">
+ 
+ //查看收藏夹
+ function doviewAddfav(){
+   window.location.href="${base.contextPath}/recruiter/resume/collection";
+  }
+</script>    

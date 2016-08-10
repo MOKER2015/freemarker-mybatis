@@ -1,0 +1,71 @@
+<style type="text/css">
+.line{
+	display: block;
+	float: none;
+}
+#reportText{
+	border: 1px solid #00bacf;
+	width: 250px;
+	height: 100px;
+}
+.mB_25{
+	margin-bottom: 25px;
+}
+</style>
+<div class="pL_15 pR_15">
+		<input type="hidden" name="rid" value="${rid}"/>
+          <div class="line">
+          	<p class="fl T_jbdx">举报的简历：</p><span id="uname" class="T_jbdx">${uname}</span>
+          	<div style="clear: both"></div>
+          </div>
+          <div class="pB_15 line">
+          	<p class="fl T_jbdx">举报类型：</p>
+            <div class="fl">
+               <span class="verinline dateSelect mT_10 width_is120" js-disabled="2">
+                  <select class="sesim" tag="请选择" name="linkType" style="display: none;">
+                    <option value="1" title="联系方式无效">联系方式无效</option>
+                    <option value="2" title="简历质量差">简历质量差</option>
+                  </select>
+                </span>
+             </div>
+             <div class="clear"></div>
+          </div>
+          <div class="line">
+          	<p class="fl T_jbdx">举报的内容：</p><textarea id="reportText" name="reportText"></textarea>
+          	<div style="clear: both"></div>
+          </div>
+          <div class="mT_25 mB_25 textAliCenter">
+          <input type="button" id="submitReport" style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;" value="提交"> 
+         <div style="text-align: center;padding-top:20px;">
+          </div>
+          </div>   
+          
+      </div>
+      
+<script type="text/javascript">
+ $("#submitReport").click(function(){
+	 var text = $("#reportText").val().trim();
+	 var linkType = $(".tag_select").attr("innerval");
+	 if(!linkType){
+		 alert("请选择举报类型！");
+		 return false;
+	 }
+	 var url = "${contextPath}/recruiter/resume/addReport";
+	 $.post(url,{reportText:text,reportRid:$("input[name='rid']").val(),
+		 uname:$("#uname").text(),linkType:linkType},function(data){
+		 $(".FloatBg").remove();
+		 $(".FloatBox").remove();
+		 var res = $.parseJSON(data);
+		 if(res.result==1){
+			 alert("举报成功");
+		 }
+	 });
+	 
+ });
+ $(function(){
+	selects = $(".sesim");
+	initSelect();
+	
+ });
+</script>    

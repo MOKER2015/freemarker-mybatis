@@ -1,0 +1,66 @@
+<#include "/comm/layout.html">
+<@head title="简历管理">
+   <script type="text/javascript" src='${base.contextPath}/resources/js/comm/default-grid.js'> </script>
+   <script type="text/javascript" src='${base.contextPath}/resources/js/comm/login-authen.js'> </script>
+   <script type="text/javascript" src='${base.contextPath}/resources/js/selector/selector.js'> </script>
+  <!--  <script type="text/javascript" src='${jsPath}/type/city.js'> </script> -->
+   <script type="text/javascript" src='${base.contextPath}/resources/js/selector/selectorfunction.js'> </script>
+   <link href="${base.contextPath}/resources/css/select.css" rel="stylesheet" type="text/css" />
+   <link href="${base.contextPath}/resources/css/thickbox.css" rel="stylesheet" type="text/css" />
+</@head>
+<@body>
+
+<div id="tbar">
+	<!-- 操作  -->
+	<div style="background: #e6efff;padding: 5px;border:1px solid #99BBE8;">
+			
+		<a href="#" plain="true" class="easyui-linkbutton addDialog" iconCls="icon-add"
+		   mydata-options="title:'新增用户',url:'${base.contextPath}/addUser'">增加</a> 
+		   
+		 <a href="#" id="doedit" plain="true" class="easyui-linkbutton upDialog" iconCls="icon-edit"
+		   mydata-options="title:'修改用户',url:'${base.contextPath}/upUser'">修改</a>
+		   
+		 <a href="#" id="dodelete" plain="true" class="easyui-linkbutton delData" iconCls="icon-cancel"
+		   mydata-options="url:'${base.contextPath}/delUser'" >删除</a>  
+		     
+		<a href="#" plain="true" class="easyui-linkbutton reSet"
+			iconCls="icon-reset" mydata-options="formId:'parms'">清空</a> 
+			
+		<a href="#" data-options="hideId:'queryparms'" class="flR flR_XX"
+			title="向上"></a>
+	</div>
+
+	<!-- 条件查询 -->
+	 <div id="queryparms" style="background: #fff;padding: 5px;">
+		<form id="parms" method="post" >
+		<table  style="margin: 10px;width: 80%;" CELLSPACING="5px;">
+		<tr>
+<!-- 		<td>id&nbsp;&nbsp;&nbsp;: <input class="formText" name="id" style="width:100px"></td> -->
+		<td>姓&nbsp;&nbsp;&nbsp;名: <input class="formText" name="name" style="width:100px"></td>
+		<td>内&nbsp;&nbsp;&nbsp;容: <input class="formText" name="context" style="width:100px"></td>		
+		<td><a href="#" id="search" plain="true" class="easyui-linkbutton query" iconCls="icon-search"
+			mydata-options="url:'${base.contextPath}/selectUser'">查询</a></td>
+		</tr>	
+	    </table>
+        </form>
+     </div>
+</div>
+
+
+ <div heigth="100%" data-options="region:'center',border:false">
+      <!--  <table id="grid" class="easyui-datagrid">  
+        </table>   -->
+	  <table id="grid" class="easyui-datagrid" 
+        data-options="toolbar:'#tbar', url:'${base.contextPath}/index_info'">
+        <thead>
+    		<tr>
+    			<th data-options="field:'id',checkbox:true"></th>
+    			<th data-options="field:'name',width:30,align:'center'">姓名</th>
+    			<th data-options="field:'password',width:20,align:'center'">密码</th>
+    			<th data-options="field:'content',width:40,align:'center'">内容</th>	
+    				
+    		</tr>
+        </thead>
+    </table>  
+</div>
+</@body>

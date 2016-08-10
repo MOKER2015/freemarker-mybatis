@@ -1,0 +1,24 @@
+      <!--待下载成功-->
+      <div>
+          <p class="pT_40 textAliCenter">
+            <img src="${recImagePath}/recruiter/icon_g.png" alt=""/>&nbsp;&nbsp;
+                                     该简历已存在意向邀请页面，无需重复下载，请查看意向邀请！
+          </p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="查看" onclick="doviewhasDown()">
+          </div>
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+      
+ <script type="text/javascript">
+ 
+ //查看已经下载
+ function doviewhasDown(){
+   window.location.href="${base.contextPath}/recruiter/intentionResume";
+  }
+  
+
+</script>  

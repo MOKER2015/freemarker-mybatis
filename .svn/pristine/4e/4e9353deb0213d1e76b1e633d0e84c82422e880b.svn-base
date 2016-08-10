@@ -1,0 +1,250 @@
+package cn.rcw.comm.util;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import cn.rcw.comm.po.Page;
+
+import com.alibaba.fastjson.JSONArray;
+
+
+/**
+ * 分页对象
+ * 
+ * @author slj
+ * @date 2015-07-15
+ * @param <T> 
+ */
+public class PageUtil<T> {
+
+	/**
+	 * 默认每页显示记录数
+	 */
+	private Integer pageNo =1;//当前页数
+	private Integer pageSize =15;//每页行数
+	private Integer totalCount;//总记录数
+	private Integer totalPage;//总页数
+	private String roll;//分页代码
+	private List<T> result = new ArrayList<T>(); // 查询的结果
+	private String rollFuncName = "query";//分页调用js函数
+	private Integer link = 10; //导航的个数
+
+	
+
+	/**
+	 * 默认构造方法
+	 * 
+	 * @param pageNo 所在第几页
+	 * @param totalSize 数据库中总记录条数
+	 * @param pageSize 本页容量
+	 * @param data 本页包含的数据
+	 * @param rollFuncName 页面翻页函数名
+	 */
+	public PageUtil(Integer pageNo, Integer totalCount, Integer pageSize, List<T> result,String rollFuncName) {
+		
+		pageInit(pageNo, totalCount, pageSize, result,rollFuncName);
+	}
+	
+	public PageUtil(Integer pageNo, Integer l, Integer pageSize, List<T> result) {
+		pageInit(pageNo, l, pageSize, result,rollFuncName);
+	}
+	
+	/**
+	 * 构造
+	 * @author slj
+	 * @param page
+	 * @date 2015-07-15
+	 */
+	public PageUtil(Page<T> page) {	
+		pageInit(page.getPageNo(), page.getCount(), page.getPageSize(),page.getList(),rollFuncName);
+	}
+	
+	public PageUtil(Page<T> page ,String rollFuncName ) {
+		pageInit(page.getPageNo(), page.getCount(), page.getPageSize(),page.getList(),rollFuncName);
+	}
+	/**
+	 * 初始分页信息
+	 */
+	private void pageInit(Integer pageNo, Integer totalCount, Integer pageSize, List<T> result,String rollFuncName){
+		this.pageSize = pageSize;
+		this.pageNo = pageNo;
+		this.totalCount = totalCount;
+		this.result = result;
+		this.rollFuncName=rollFuncName != null && !rollFuncName.equals("") ? rollFuncName : this.rollFuncName;
+		//总页数
+		totalPage=initTotalPage(this.totalCount,this.pageSize);
+		//分页信息
+		roll=initRoll();
+	}
+	
+	/*
+	 * 总页数
+	 */
+	private Integer initTotalPage(Integer totalCount,Integer pageSize){
+		if(totalCount<=0||totalCount==null||pageSize<=0||pageSize==null)return 0;
+		int p=totalCount/pageSize;
+		if(p==0)return 1;
+		if(totalCount%pageSize>0)p++;
+		if(totalCount>=500)p=500;
+		return p;
+	}
+	
+	/**
+	 * 分页信息
+	 * @return
+	 */
+	private String initRoll(){
+		LinkedList<Integer> showPages=getShowPageNo();
+		
+		if(this.totalPage==null||this.totalPage<=0)return "";
+		if(this.pageNo==null||this.pageNo<=0){
+			this.pageNo=0;
+		}
+		
+		StringBuffer rollStr = new StringBuffer("");
+		rollStr.append("");
+		
+		rollStr.append("<A href='javascript:void(0)'  onclick='"+this.rollFuncName+"(1);'>首页</A>");
+		if(this.pageNo!=null&&this.pageNo>1){
+			rollStr.append("<A href='javascript:void(0)' onclick='"+this.rollFuncName+"("+(this.pageNo-1)+");'>上一页</A>");
+		}else{
+			rollStr.append("<A href='javascript:void(0)'>上一页</A>");
+		}		
+		 
+		int size = showPages.size();
+		for(int i=0;i<size;i++){
+			Integer showPage = showPages.pollFirst();
+			//String cls = showPage.intValue()==this.pageNo ? "page selected" : "page";</A>
+
+            rollStr.append("<A href='javascript:void(0)' onclick='"+this.rollFuncName+"("+showPage+");'");
+            
+            if(showPage.intValue()==this.pageNo)
+            	rollStr.append(" class='sz' >"+showPage+"</A>");
+            else
+            	rollStr.append("  >"+showPage+"</A>");
+		}
+	
+		if(this.pageNo<this.totalPage){
+			rollStr.append("<A href='javascript:void(0)' onclick='"+this.rollFuncName+"("+(this.pageNo+1)+");'>下一页</A>");
+		}else{
+			rollStr.append("<A href='javascript:void(0)'>下一页</A>");
+		}
+		rollStr.append("<A href='javascript:void(0)'  onclick='"+this.rollFuncName+"("+this.totalPage+");'>尾页</A>");
+		
+		return rollStr.toString();
+		
+	}
+	
+	private LinkedList<Integer> getShowPageNo(){
+		LinkedList<Integer> pages=new LinkedList<Integer>();
+		if(this.totalPage==null||this.totalPage<=0)return pages;
+		
+		if(this.totalPage<=link){
+			for(int i=1;i<=this.totalPage;i++){
+				pages.add(i);
+			}
+			return pages;
+		}
+		
+		if(this.pageNo<=link/2){
+			for(int i=1;i<=link-1;i++){
+				pages.add(i);
+			}
+			pages.add(this.totalPage);
+			return pages;
+		}
+		
+		if(this.totalPage-this.pageNo<link){
+			for(int i=this.totalPage-link+1;i<=this.totalPage;i++){
+				pages.add(i);
+			}
+			return pages;
+		}
+		
+		for(int i=this.pageNo-link/2+(1-link%2);i<=this.pageNo+(link/2-1);i++){
+			pages.add(i);
+		}
+		pages.add(this.totalPage);
+		return pages;
+		
+		
+		
+		
+	}
+	
+	public String toString(){
+		String str="{\"totalCount\":" + totalCount+
+				",\"pageSize\":" + pageSize + 
+				",\"pageNo\":" + pageNo;
+				 
+		if (!result.isEmpty()){
+			str=str+",\"roll\":" + roll+
+					",\"rows\":" + JSONArray.toJSONString(result) + "}";
+		}else{
+			str=str+ "}";
+		}
+		return str;
+		/*return "{\"totalCount\":" + totalCount + 
+				",\"pageSize\":" + pageSize + 
+				",\"pageNo\":" + pageNo + 
+				",\"roll\":" + roll + 
+				",\"rows\":" + JSONArray.toJSONString(result) + "}";*/
+	}
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
+	}
+
+	public String getRoll() {
+		return roll;
+	}
+
+	public void setRoll(String roll) {
+		this.roll = roll;
+	}
+
+	public List<T> getResult() {
+		return result;
+	}
+
+	public void setResult(List<T> result) {
+		this.result = result;
+	}
+	
+	public String getRollFuncName() {
+		return rollFuncName;
+	}
+
+	public void setRollFuncName(String rollFuncName) {
+		this.rollFuncName = rollFuncName;
+	}
+
+}

@@ -1,0 +1,68 @@
+ <!--请输入验证码-->
+      <div>
+           <p class="pT_40 textAliCenter" style="display:none" id="error">&nbsp;
+          <!--  <span class="fontSize_24 fontWeiBold fontCol_red" id="error">             
+           </span> -->
+           </p>  
+           <input type="hidden" value="${rid}" id="rid" >
+          <p class="pT_40 textAliCenter">
+            <input  style="background:#ebebeb;width:120px;height:34px; 
+                margin:0 0 0 15px;" name="captcha" 
+                 id="captcha" type="text" autocomplete="off" placeholder="" />
+		       <span id="imgdiv"></span>
+          </p>
+           <p style="height: 20px"></p>
+          <div style="text-align: center;padding-top:30px;" >
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="确定" onclick="onview()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button"  style="background-color: #00bacf;border-radius: 4px;
+               color: #fff;cursor: pointer;font-size: 16px;font-weight: bold;height: 40px;width: 120px;"
+            value="取消"   class="DialogClose" >
+          </div>
+          <div style="text-align: center;padding-top:30px;">
+          </div>
+      </div>
+<script type="text/javascript">
+ 
+$(function(){
+  refreshCaptcha();
+  
+   $("#imgdiv").live("click",function(){
+			refreshCaptcha();
+  	});
+  
+  })
+  //获取验证码
+ function refreshCaptcha(){
+		$("#imgdiv").html("<img src=\""+contextPath+"/captcha/generate?t=" +(new Date()).getTime() + "\" id=\"getCaptcha\" title=\"看不请验证码？点击更换一张\" />"); 
+	}
+	
+function onview(){
+  var rid=$("#rid").val();
+   //alert(rid);
+  	$.ajax({
+			url :"${base.contextPath}/captcha/validate",
+			data : {"captcha":$("#captcha").val()},
+			type : "post",
+			dataType : "json",
+ 			error : function(XMLHttpRequest, textStatus, errorThrown){
+				alert("验证码校验失败");
+			},
+			success : function(res, textStatus){
+			    if(res){//验证码正确
+			    	window.open("${base.contextPath}/resumemgr/resumeView?rid="+rid);
+			    	$(".DialogClose").click();
+			    }else{
+			       error="<span class=\"fontSize_24 fontWeiBold fontCol_red\"> 验证码错误或者过期</span>";
+			       $("#error").html(error);
+					$("#error").show();
+			    	$("#captcha").focus();
+					return;
+			    }
+			}
+		});
+  
+}	
+	
+</script>     
