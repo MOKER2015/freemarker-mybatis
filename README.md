@@ -1,0 +1,3 @@
+# freemarker-mybatis
+freemarker和mybatis的maven项目
+运行前请先运行WEB-INF下面的2个sql文件
